@@ -5,19 +5,19 @@ import { getAllPosts } from '../../data-loading/getAllPosts';
 export async function getStaticPaths() {
   const posts = await getAllPosts();
 
-  return posts.map(({ frontmatter: { slug }, Content }) => {
+  return posts.map(({ frontmatter, Content }) => {
     return {
-      params: { slug },
-      props: { Content },
+      params: {
+        slug: frontmatter.slug,
+      },
+      props: { Content, title: frontmatter.title },
     };
   });
 }
 
-const { slug } = Astro.params;
-const { Content } = Astro.props;
+const { Content, title } = Astro.props;
 ---
 
-<Layout title="Post">
-  <main>this is a blog post at {slug}</main>
+<Layout title={title}>
   <Content />
 </Layout>
