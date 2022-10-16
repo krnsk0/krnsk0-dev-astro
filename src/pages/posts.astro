@@ -1,0 +1,37 @@
+---
+import Layout from '../components/Layout.astro';
+import { getAllPosts } from '../data-loading/getAllPosts';
+const posts = await getAllPosts();
+---
+
+<Layout title="Writing">
+  <main>
+    <h1>writing</h1>
+    <ul>
+      {
+        posts.map(
+          ({ frontmatter: { title, date, description, word_count } }) => {
+            return (
+              <li>
+                <h2>{title}</h2>
+                <p>
+                  {date.toLocaleString('default', {
+                    day: 'numeric',
+                    month: 'long',
+                    year: 'numeric',
+                  })}
+                </p>
+                <p>{word_count} words </p>
+                <p>{description}</p>
+              </li>
+            );
+          }
+        )
+      }
+    </ul>
+  </main>
+</Layout>
+
+<style>
+  /* TODO */
+</style>
