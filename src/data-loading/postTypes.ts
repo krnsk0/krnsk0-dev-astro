@@ -20,3 +20,8 @@ export const FrontmatterSchema = z.object({
   slug: z.string(),
 });
 export type Frontmatter = z.infer<typeof FrontmatterSchema>;
+
+export interface Post {
+  frontmatter: Frontmatter;
+}
+export type Posts = Post[];

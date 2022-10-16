@@ -10,10 +10,12 @@ const posts = await getAllPosts();
     <ul>
       {
         posts.map(
-          ({ frontmatter: { title, date, description, word_count } }) => {
+          ({ frontmatter: { title, date, description, word_count, slug } }) => {
             return (
               <li>
-                <h2>{title}</h2>
+                <h2>
+                  <a href={slug}>{title}</a>
+                </h2>
                 <p>
                   {date.toLocaleString('default', {
                     day: 'numeric',
