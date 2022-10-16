@@ -1,10 +1,5 @@
 import z from 'zod';
 
-export const ViteImportReturnSchema = z.object({
-  frontmatter: z.unknown(),
-});
-export type ViteImportReturn = z.infer<typeof ViteImportReturnSchema>;
-
 export const dateSchema = z.preprocess((arg) => {
   if (typeof arg == 'number') return new Date(arg);
   else throw new Error('cannot parse date');
@@ -20,8 +15,3 @@ export const FrontmatterSchema = z.object({
   slug: z.string(),
 });
 export type Frontmatter = z.infer<typeof FrontmatterSchema>;
-
-export interface Post {
-  frontmatter: Frontmatter;
-}
-export type Posts = Post[];
