@@ -14,11 +14,5 @@ export default defineConfig({
     },
   },
   site: 'https://krnsk0.dev',
-  integrations: [
-    mdx(),
-    sitemap({
-      // exclude /writing as this is the old url
-      filter: (page) => !page.inclues('https://krnsk0.dev/writing/'),
-    }),
-  ],
+  integrations: [mdx(), sitemap()],
 });
