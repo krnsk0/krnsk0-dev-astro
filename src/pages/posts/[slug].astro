@@ -1,8 +1,26 @@
 ---
-import { getStaticPathsForPosts } from '../../data-loading/getStaticPathsForPosts';
-import Post from '../../components/Post.astro';
-export const getStaticPaths = getStaticPathsForPosts;
+import Layout from '../../components/Layout.astro';
+import { getAllPosts } from '../../data-loading/getAllPosts';
+import { formatDate } from '../../formatting/formatDate';
+
+export async function getStaticPaths() {
+  const posts = await getAllPosts();
+
+  return posts.map(({ frontmatter: { slug, title, date }, Content }) => {
+    return {
+      params: {
+        slug: slug,
+      },
+      props: { Content, title, date },
+    };
+  });
+}
+
 const { Content, title, date } = Astro.props;
 ---
 
-<Post Content={Content} title={title} date={date} />
+<Layout title={title}>
+  <h1>{title}</h1>
+  <div>{formatDate(date)}</div>
+  <Content />
+</Layout>

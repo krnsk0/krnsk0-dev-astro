@@ -1,8 +1,0 @@
----
-import { getStaticPathsForPosts } from '../../data-loading/getStaticPathsForPosts';
-import Post from '../../components/Post.astro';
-export const getStaticPaths = getStaticPathsForPosts;
-const { Content, title, date } = Astro.props;
----
-
-<Post Content={Content} title={title} date={date} />
