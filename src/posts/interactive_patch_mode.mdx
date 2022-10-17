@@ -1,84 +1,208 @@
 ---
 title: >
-    'A Thorough Introduction to Git's Interactive Patch Mode'
+  A Thorough Introduction to Git's Interactive Patch Mode
 date: 1564293645000
 published: true
 description: 'How to integrate `git add -p` to your workflow'
 slug: 'interactive_patch_mode'
 ---
 
-> Also published to [Dev.to](https://dev.to/krnsk0/introducing-guser-a-cli-tool-for-git-user-switching-lf6)
+> Also published to [Dev.to](https://dev.to/krnsk0/a-thorough-introduction-to-git-s-interactive-patch-mode-4bl6)
+>
+You've been hacking away at a project when you realize: "I haven't committed in an hour." Or, perhaps worse still: "my unstaged changes represent multiple [units of work](https://jasonmccreary.me/articles/when-to-make-git-commit/)"--  whether those units are features, steps in a refactor, or bugfixes.
 
-Do you manage multiple Git users on a single machine? Do you often switch between work projects and side projects and configure different repositories to use different accounts?
+Suppose you run `git status` and you see unstaged changes in multiple files. Suppose further that you can say with confidence that the changes are divided among the files in a way that corresponds to a division between discrete units of work. So far, so good; you're in a position to `git add` and `git commit` files separately, resulting in a history in which units of work are appropriately separated from one another.
 
-If so, [you might benefit from `guser`](https://www.npmjs.com/package/guser), a small CLI tool that helps make Git user-switching a tiny bit easier by remembering user/email combinations you've used in the past.
+But what if changes representing separate units of work exist *within* single files? Suppose, in your hour of undisciplined hacking, you added a new feature to *one* function inside of `app.js`, but also added a bugfix to a *different* function found in the same file?
 
-As an added bonus, if you try out `guser` you'll also be in a position to give me feedback on my very first CLI tool-- and also the first project I've published to NPM 😎.
+Here, `git add`ing files separately can't help you; you need to be able to stage and commit *regions within files*. These are called *hunks*, in git. And to work with hunks, git gives us an *interactive patch mode*, which we can enter with the commands `git add -patch` or `git add -p`.
 
-## Configuring Git users
-You probably recall configuring Git when first setting up your development environment: you likely set up an SSH key to allow Git to authenticate with Github or another remote, and you probably also configured Git with a username and email used to sign your commits.
+## Introducing Patch Mode
 
-This second step you likely performed with the `git config` tool that comes with Git, and it probably looked something like this:
+Patch mode is a small CLI application which intelligently divides unstaged changes into hunks and presents these hunks to us in turn so we can decide whether or not to stage each one. (It is available directly via `git add -p`, but also available within the `git add -interactive` interface, not discussed in this post.)
 
-```bash
-$ git config --global user.name "Margaret Hamilton"
-$ git config --global user.email margaret@hamilton.com
+Let's say we start off with an `app.js` that looks like this:
+
+```js
+const countToNumber = number => {
+  console.log(`Let's count to ${number}`);
+  for (let i = 0; i < number; i += 1) {
+    console.log(i);
+  }
+  console.log(`We counted to ${number}!`);
+};
+
+const numbers = [100, 1000, 50, 35];
+
+numbers.forEach(number => {
+  countToNumber(number);
+});
 ```
 
-These commands created and/or edited a configuration file, `.gitconfig`, in your home directory:
+Suppose we've made a few changes. After realizing that `countToNumber` stops just short of the target, we change `<` to `<=` in the line that initializes the loop.
 
-```bash
-$ cat .gitconfig
-[user]
-	name = "Margaret Hamilton"
-	email = "margaret@hamilton.com"
+Then we decide we don't want to invoke `countToNumber`, in this file, but instead want to export a function that can produce side effects to the console for use elsewhere. We wrap the last three lines in a function, which we export:
+
+
+```js
+export const processNumbers = numbers => {
+  numbers.forEach(number => {
+    countToNumber(number);
+  });
+};
+
 ```
 
-This config file in your user directory is one of three such possible files Git might reference when authoring a commit to determine the username and email to use:
+We also delete the `numbers` array which we (perhaps) used to test our work, now that we're ready to export the function we've written.
 
-1. `/etc/gitconfig/`, which configures Git for every user on the system
-2. `~/.gitconfig`, the aforementioned file, specific to the user who the containing directory belongs to
-3. `[repository path]/.git/config`, which sets a configuration specific to a particular repository.
-
-When you set up Git using `git config --global`, you told the `config` tool to create or write to the second, user-level file. But you might have passed `--system` to write to the first system-wide file or `--local` to write to a config file in a repo, provided your current working directory is inside such a repo.
-
-Importantly, values from a local config file (if present) override those from a user config file (if present), both of which in turn override values from a system-level config (if present). Note that we say "values", here: if a local file lacks a value for `user` but has a value for `email`, the local email will be used but the user will be pulled from either the user- or system-level config files, assuming one of these has a user present.
+Finally, we decide we also want to expose a function for filtering numbers before printing to the console, so we add a filter function:
 
 
-## Managing multiple users with `guser`
-We often find ourselves with a default user and email set in `~/.gitconfig` which we wish to override at the level of an individual repository.
-
-Perhaps we have a work email and username set in our user directory, but also wish to work on a personal project and author commits that match the username of a personal Github account. Or perhaps we need to manage multiple work-related Git accounts with different usernames-- for example, one for a Github enterprise instance and another authorized to access a private organization on `github.com`.
-
-Ordinarily, this is as straightforward as running `git config` with `--local` flags for the user and email when inside the repository that needs to override user- or system-level configs. But this can get tedious when we have many accounts to manage or when we frequently clone new repositories (as `.git/config` is not committed or pushed to the remote).
-
-This is where `guser` can help. It's a thin wrapper over these `git config` commands coupled with a means to persist frequently-used config/email pairs to a config file in your user directory, all behind an interactive CLI that lets you quickly choose the config to set:
-
-```bash
-$ guser
-Checking for local git config...
-No local user set
-No local email set
-? What would you like to do? › - Use arrow-keys. Return to submit.
-❯   Set local git user config
-    Remove user config from guser
-    List configs in guser
-    Add user config to guser
+```js
+export const filterNumbers = (numbers, maximum) => {
+  return numbers.filter(n => n < maximum);
+};
 ```
 
-## Alternatives to `guser`
+Having made these changes, we realize we want to split them up. So, we run `git add -p app.js`, and git gives us back the following:
 
-Despite being a CLI tool, `guser` doesn't really follow the [unix philosophy](https://en.wikipedia.org/wiki/Unix_philosophy#:~:text=The%20Unix%20philosophy%20is%20documented,%2C%20as%20yet%20unknown%2C%20program.). While it does one thing and just one thing well, it opts for an interactive interface over pipeability and composability.
-
-If you would prefer a similar tool that can be driven entirely via flags and arguments, check out [WindomZ's `gituser.js`](https://github.com/WindomZ/gituser.js).
-
-## What do you think?
-Lately, I've struggled to make progress with a number of overambitious side projects. `guser` was born from a desire to quickly finish something small and hopefully useful to break this streak.
-
-I decided to go for a number of personal firsts, with this project: first time setting up  pipeline using Github Actions (by far the least time I've ever spent on this); first time publishing something to NPM (turns out it's pretty straightforward); first time attempting to get 100% test coverage of a codebase (as fun as it is to include green coverage badges in a readme, let's just say that next time, I'm foregoing a fair amount of unit testing in favor of typescript plus a smaller number of integration tests). Things worked out reasonably well on all three counts.
-
-But, more importantly, this is my first time releasing something outside of a work context that aims to actually useful to someone-- as opposed to learning projects and projects which aim only to delight and amuse. So, naturally, I'm hoping that you'll try it out and let me know what you think, whether via comments here or [via Github](https://github.com/krnsk0/guser):
-
-```bash
-npm i -g guser
 ```
+diff --git a/app.js b/app.js
+index eceb575..c97e738 100644
+--- a/app.js
++++ b/app.js
+@@ -1,13 +1,17 @@
+ const countToNumber = number => {
+   console.log(`Let's count to ${number}`);
+-  for (let i = 0; i < number; i += 1) {
++  for (let i = 0; i <= number; i += 1) {
+     console.log(i);
+   }
+   console.log(`We counted to ${number}!`);
+ };
+
+-const numbers = [100, 1000, 50, 35];
++export const processNumbers = numbers => {
++  numbers.forEach(number => {
++    countToNumber(number);
++  });
++};
+
+-numbers.forEach(number => {
+-  countToNumber(number);
+-});
++export const filterNumbers = (numbers, maximum) => {
++  return numbers.filter(n => n < maximum);
++};
+Stage this hunk [y,n,q,a,d,s,e,?]?
+```
+
+> **Note**: Don't read too much into the `diff --git` line in the output; the `diff` command has no such option. This is just a hard-coded string [in the `git diff` output](http://www.gelato.unsw.edu.au/archives/git/0505/3880.html) to help us understand what git is doing with reference to whatever knowledge we may have of `diff`, and also to indicate a *format* for this diff output (a variant of the [unified diff format](https://en.wikipedia.org/wiki/Diff#Unified_format)). If you've used `git diff`, then what you see here should be familiar to you.
+
+> The output of `git diff`, by the way, can be redirected into a file called a *patch* which can be saved somewhere or passed to a friend before being later applied: `git diff > mypatch.patch` and then `git apply mypatch.patch`. (Or, if you want to do this with staged as opposed to unstaged changes, redirect `git diff --cached`.) This is related to why the tool we're exploring  here is called 'patch mode', but a full exploration of how git works in this respect deserves its own post.
+
+
+We can see that git has decided to group all of the changes into a single hunk. But we want to split them up. We'll talk about all of the commands later; for now we'll choose `s` (to [s]plit this hunk), and git shows us just the part we want:
+
+```
+@@ -1,8 +1,8 @@
+ const countToNumber = number => {
+   console.log(`Let's count to ${number}`);
+-  for (let i = 0; i < number; i += 1) {
++  for (let i = 0; i <= number; i += 1) {
+     console.log(i);
+   }
+   console.log(`We counted to ${number}!`);
+ };
+```
+
+Now we're talking. Let's choose `y`, to stage this hunk, and then `q`, for '[q]uit'. This takes us out of interactive mode and back to the command line. If we run `git status`, we'll see that there are both staged and unstaged changes in `app.js`-- which is exactly what we want. We can commit our first unit of work using something like `git commit -m "fix bug which stopped count just short of number"`, and then stage the next unit.
+
+So, we run `git add -p app.js`. After splitting using `s`, git isolates the changes to `processNumbers`:
+
+```
+@@ -6,5 +6,9 @@
+-const numbers = [100, 1000, 50, 35];
++export const processNumbers = numbers => {
++  numbers.forEach(number => {
++    countToNumber(number);
++  });
++};
+```
+
+Now we choose `y` and then `q`, as before, and then we can make a commit: `git commit -m "export function which wraps countToNumber"`. We could go back into interactive mode, but we know the only remaining uncommitted change represents a single unit of work, so we can add it and commit in the usual way.
+
+Now we have a history in which our commits represent discrete units of work:
+
+```
+commit bc80191fe63bf75bae7d976b61cf1c24e9391097 (HEAD -> master)
+Author: Dev.to Reader <dev.to@reader.com>
+Date:   Sun Jul 28 10:48:37 2019 -0500
+
+    export function for filtering lists of numbers
+
+commit 6c36b351cc2a8cc0f6f3582b3221f5e427980fbc
+Author: Dev.to Reader <dev.to@reader.com>
+Date:   Sun Jul 28 10:47:02 2019 -0500
+
+    export function which wraps countToNumber
+
+commit 0b59f6917215a5c264735e4ed01cf6d1f3c977e4
+Author: Dev.to Reader <dev.to@reader.com>
+Date:   Sun Jul 28 10:40:25 2019 -0500
+
+    fix bug which stopped count just short of number
+```
+
+## Patch Mode Commands
+
+Running `?` or `h` will show us the commands available in patch mode:
+
+```
+y - stage this hunk
+n - do not stage this hunk
+q - quit; do not stage this hunk or any of the remaining ones
+a - stage this hunk and all later hunks in the file
+d - do not stage this hunk or any of the later hunks in the file
+g - select a hunk to go to
+/ - search for a hunk matching the given regex
+j - leave this hunk undecided, see next undecided hunk
+J - leave this hunk undecided, see next hunk
+k - leave this hunk undecided, see previous undecided hunk
+K - leave this hunk undecided, see previous hunk
+e - manually edit the current hunk
+? - print help
+```
+
+We've seen `y`, `q`, and `s`, which allow us to stage hunks, quit, and split into smaller hunks, respectively. We'll return to the topic of splitting soon.
+
+Very commonly, after entering patch mode and splitting, I'll page through hunks with `jJkK` to orient myself in a file, looking for patterns in the changes I can group together before staging a few and exiting.
+
+Importantly, patch mode can be called on a file (`git add -p app.js`) or on the entire repository (`git add -p`), so if you have changes in multiple files but know you want to hunkify changes in just one file, you can do so. `a` and `d` are intended for use in a context in which we've entered patch mode with many files in our pathspec, as they help us deal with changes in a file in bulk. Generally, we probably wouldn't be in interactive mode if we wanted to deal with changes in bulk, according to the file in which they appear; thus I find myself using `d` sometimes and `a` almost never.
+
+The `g` command gives us an interactive menu showing filenames and line numbers for all hunks. I also don't find myself using this one much, as I don't usually know just what files and lines I'm interested in staging prior to having them presented to me.
+
+The `/` command, however, can be very useful. When I'm going through a lot of changes and discover some work I'd like to group together sharing some common searchable feature--say, a reference to a particular variable or function--I'll pare down the changes using `/` and `y` until `/` stops returning results.
+
+Selecting `e` opens up the current hunk in whatever editor you have configured git to use (`git config --global core.editor`) to allow line-by-line staging. This is most useful when you've reached the minimum hunk size that interactive mode will give you and need very fine control over what is being committed. We'll return to this in a moment.
+
+## Intent to Add
+
+If you add a new file to a repository, add some contents, and then run `git diff`, you won't see anything from your new file in the output. This is because `git diff` shows us unstaged changes relative to the staging area, and if we haven't yet tracked a file, it's not yet available for comparison.
+
+Because interactive add mode is built around `git diff`, changes to a new untracked file aren't at first visible in patch mode. We could of course `git add` the file, but this leads to a conundrum, as now we'll have staged the entire file. There are a couple of ways to solve this.
+
+One less conventional solution might be to use `git reset -p`-- as it turns out `git reset` also has an interactive patch mode. We could use this to unstage all changes from the new file but the ones we intend to commit, and then make a commit.
+
+But this is cumbersome. A more conventional and faster solution is to use the command `git add --intent-to-add` (or its shorthand `git add -N`). This allows us add a file *but not its contents* to the staging area, which means `git diff` and `git add -p` will give us what we want.
+
+
+## Developer Workflow & Limits of Hunks
+
+The occasional need for `e` shows some of the limits of interactive patch mode. [Options](https://git-scm.com/docs/diff-config#diff-config-diffcontext) for `git diff` let us specify some defaults for hunks: `git config --global diff.context` lets us set the number of lines of context to provide around a change, while the `diff.interHunkContext` option lets us set the number of lines which should appear between hunks, allowing us some control over hunk size.
+
+But, despite the control we get over defaults, git **always** groups changes to adjacent lines together. If changes on consecutive lines represent different units of work, we'll need to manually edit the patch using `e`, which gives us the most fine-grained control it is possible to exercise over the contents of our commits.
+
+Patches have some limits tightly coupled to the limits of git itself: the smallest unit of change in git is a line, and so if we have made multiple changes to a line which represent distinct units of work, git can't help us record these separately.
+
+But this is just to say that interactive patch mode is no substitute or an organized development process. While it can help us recover from the occasional session in which we have not exercised the kind of git discipline which a task or team demands of us, it can like any tool be mis- or over-used. So, don't let the availability of `git add -p` replace thought and planning in your workflow.

@@ -5,11 +5,12 @@ function isObject(x: unknown): x is Record<string, unknown> {
 }
 
 function hasProp<K extends PropertyKey>(
-  data: object,
+  x: object,
   prop: K
-): data is Record<K, unknown> {
-  return prop in data;
+): x is Record<K, unknown> {
+  return prop in x;
 }
+
 export interface Post {
   frontmatter: Frontmatter;
   Content: () => unknown;
@@ -29,7 +30,8 @@ export async function getAllPosts(): Promise<Posts> {
       const frontmatter = FrontmatterSchema.parse(file.frontmatter);
       return {
         frontmatter,
-        Content: file.Content,
+        // Content is an astro commponent; safe to make this assertion here
+        Content: file.Content as () => unknown,
       };
     } else {
       throw new Error('file missing required property');
