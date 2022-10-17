@@ -14,7 +14,7 @@ const posts = await getAllPosts();
           return (
             <li>
               <h2>
-                <a href={slug}>{title}</a>
+                <a href={`posts/${slug}`}>{title}</a>
               </h2>
               <p>{formatDate(date)}</p>
               <p>{description}</p>
