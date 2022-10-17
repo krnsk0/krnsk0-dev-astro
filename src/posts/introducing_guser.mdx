@@ -1,0 +1,83 @@
+---
+title: 'Introducing `guser`'
+date: 1599457903000
+published: true
+description: 'A CLI Tool for Git User-Switching'
+slug: 'introducing-guser'
+---
+
+> Also published to [Dev.to](https://dev.to/krnsk0/introducing-guser-a-cli-tool-for-git-user-switching-lf6)
+
+Do you manage multiple Git users on a single machine? Do you often switch between work projects and side projects and configure different repositories to use different accounts?
+
+If so, [you might benefit from `guser`](https://www.npmjs.com/package/guser), a small CLI tool that helps make Git user-switching a tiny bit easier by remembering user/email combinations you've used in the past.
+
+As an added bonus, if you try out `guser` you'll also be in a position to give me feedback on my very first CLI tool-- and also the first project I've published to NPM 😎.
+
+## Configuring Git users
+You probably recall configuring Git when first setting up your development environment: you likely set up an SSH key to allow Git to authenticate with Github or another remote, and you probably also configured Git with a username and email used to sign your commits.
+
+This second step you likely performed with the `git config` tool that comes with Git, and it probably looked something like this:
+
+```bash
+$ git config --global user.name "Margaret Hamilton"
+$ git config --global user.email margaret@hamilton.com
+```
+
+These commands created and/or edited a configuration file, `.gitconfig`, in your home directory:
+
+```bash
+$ cat .gitconfig
+[user]
+	name = "Margaret Hamilton"
+	email = "margaret@hamilton.com"
+```
+
+This config file in your user directory is one of three such possible files Git might reference when authoring a commit to determine the username and email to use:
+
+1. `/etc/gitconfig/`, which configures Git for every user on the system
+2. `~/.gitconfig`, the aforementioned file, specific to the user who the containing directory belongs to
+3. `[repository path]/.git/config`, which sets a configuration specific to a particular repository.
+
+When you set up Git using `git config --global`, you told the `config` tool to create or write to the second, user-level file. But you might have passed `--system` to write to the first system-wide file or `--local` to write to a config file in a repo, provided your current working directory is inside such a repo.
+
+Importantly, values from a local config file (if present) override those from a user config file (if present), both of which in turn override values from a system-level config (if present). Note that we say "values", here: if a local file lacks a value for `user` but has a value for `email`, the local email will be used but the user will be pulled from either the user- or system-level config files, assuming one of these has a user present.
+
+
+## Managing multiple users with `guser`
+We often find ourselves with a default user and email set in `~/.gitconfig` which we wish to override at the level of an individual repository.
+
+Perhaps we have a work email and username set in our user directory, but also wish to work on a personal project and author commits that match the username of a personal Github account. Or perhaps we need to manage multiple work-related Git accounts with different usernames-- for example, one for a Github enterprise instance and another authorized to access a private organization on `github.com`.
+
+Ordinarily, this is as straightforward as running `git config` with `--local` flags for the user and email when inside the repository that needs to override user- or system-level configs. But this can get tedious when we have many accounts to manage or when we frequently clone new repositories (as `.git/config` is not committed or pushed to the remote).
+
+This is where `guser` can help. It's a thin wrapper over these `git config` commands coupled with a means to persist frequently-used config/email pairs to a config file in your user directory, all behind an interactive CLI that lets you quickly choose the config to set:
+
+```bash
+$ guser
+Checking for local git config...
+No local user set
+No local email set
+? What would you like to do? › - Use arrow-keys. Return to submit.
+❯   Set local git user config
+    Remove user config from guser
+    List configs in guser
+    Add user config to guser
+```
+
+## Alternatives to `guser`
+
+Despite being a CLI tool, `guser` doesn't really follow the [unix philosophy](https://en.wikipedia.org/wiki/Unix_philosophy#:~:text=The%20Unix%20philosophy%20is%20documented,%2C%20as%20yet%20unknown%2C%20program.). While it does one thing and just one thing well, it opts for an interactive interface over pipeability and composability.
+
+If you would prefer a similar tool that can be driven entirely via flags and arguments, check out [WindomZ's `gituser.js`](https://github.com/WindomZ/gituser.js).
+
+## What do you think?
+Lately, I've struggled to make progress with a number of overambitious side projects. `guser` was born from a desire to quickly finish something small and hopefully useful to break this streak.
+
+I decided to go for a number of personal firsts, with this project: first time setting up  pipeline using Github Actions (by far the least time I've ever spent on this); first time publishing something to NPM (turns out it's pretty straightforward); first time attempting to get 100% test coverage of a codebase (as fun as it is to include green coverage badges in a readme, let's just say that next time, I'm foregoing a fair amount of unit testing in favor of typescript plus a smaller number of integration tests). Things worked out reasonably well on all three counts.
+
+But, more importantly, this is my first time releasing something outside of a work context that aims to actually useful to someone-- as opposed to learning projects and projects which aim only to delight and amuse. So, naturally, I'm hoping that you'll try it out and let me know what you think, whether via comments here or [via Github](https://github.com/krnsk0/guser):
+
+```bash
+npm i -g guser
+```

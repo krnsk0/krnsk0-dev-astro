@@ -6,12 +6,14 @@ export const dateSchema = z.preprocess((arg) => {
 }, z.date());
 export type DateSchema = z.infer<typeof dateSchema>;
 
+/**
+ * Useful for enforcing shape of frontmatter
+ */
 export const FrontmatterSchema = z.object({
   title: z.string(),
   date: dateSchema,
   published: z.boolean(),
   description: z.string(),
-  word_count: z.number(),
   slug: z.string(),
 });
 export type Frontmatter = z.infer<typeof FrontmatterSchema>;

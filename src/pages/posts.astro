@@ -1,6 +1,7 @@
 ---
 import Layout from '../components/Layout.astro';
 import { getAllPosts } from '../data-loading/getAllPosts';
+import { formatDate } from '../formatting/formatDate';
 const posts = await getAllPosts();
 ---
 
@@ -9,26 +10,17 @@ const posts = await getAllPosts();
     <h1>writing</h1>
     <ul>
       {
-        posts.map(
-          ({ frontmatter: { title, date, description, word_count, slug } }) => {
-            return (
-              <li>
-                <h2>
-                  <a href={slug}>{title}</a>
-                </h2>
-                <p>
-                  {date.toLocaleString('default', {
-                    day: 'numeric',
-                    month: 'long',
-                    year: 'numeric',
-                  })}
-                </p>
-                <p>{word_count} words </p>
-                <p>{description}</p>
-              </li>
-            );
-          }
-        )
+        posts.map(({ frontmatter: { title, date, description, slug } }) => {
+          return (
+            <li>
+              <h2>
+                <a href={slug}>{title}</a>
+              </h2>
+              <p>{formatDate(date)}</p>
+              <p>{description}</p>
+            </li>
+          );
+        })
       }
     </ul>
   </main>
