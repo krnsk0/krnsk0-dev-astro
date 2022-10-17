@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+Sitemap: https://www.krnsk0.dev/sitemap.xml
+Host: https://www.krnsk0.dev
