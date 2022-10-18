@@ -1,0 +1,57 @@
+/* https://www.happyhues.co/palettes/9 */
+/* https://www.happyhues.co/palettes/13 */
+:root {
+  --background: #282c35;
+  --headline: #ffac4d;
+  --paragraph: #c8c8c8;
+  --links: #e53170;
+  --inline-code-background: rgba(110, 120, 145, 0.3);
+  --inline-code-text: #c8c8c8;
+}
+
+/* Color */
+body {
+  background-color: var(--background);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--headline);
+}
+
+p,
+div,
+span,
+button,
+q,
+blockquote {
+  color: var(--paragraph);
+}
+
+a {
+  color: var(--links);
+}
+
+/* Sizing */
+h1 {
+  font-size: 2em;
+  margin: 2em 0 1em 0;
+}
+h2 {
+  font-size: 1.5em;
+  margin: 1.5em 0 1em 0;
+}
+p,
+q,
+blockquote {
+  margin: 0.8em 0 0.8em 0;
+}
+
+/* <code> elements not children of a <pre> */
+code:not(pre *) {
+  background-color: var(--inline-code-background);
+}

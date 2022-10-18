@@ -2,31 +2,33 @@
 ---
 
 <style>
-  .topbar {
-    border: 1px red solid;
-    top: 0;
-    left: 0;
+  .logo {
+    color: var(--headline);
   }
-  svg {
-    width: 1.5em;
-    height: 1.5em;
+
+  .navbar {
+    display: flex;
+    justify-content: space-between;
   }
 </style>
 
-<div class="topbar">
-  <span>krnsk0.dev_</span>
+<div class="navbar">
+  <span class="logo">krnsk0.dev_</span>
   <nav>
-    <a href="/posts">[posts]</a>
-    <a href="/">[about]</a>
+    <a href="/posts">posts</a>
+    <span>|</span>
+    <a href="/">about</a>
+    <span>|</span>
     <a
       href="https://www.linkedin.com/in/krnsk0/"
       rel="noreferrer noopener"
-      target="_blank">[linkedin]</a
+      target="_blank">linkedin</a
     >
+    <span>|</span>
     <a
       href="https://github.com/krnsk0"
       rel="noreferrer noopener"
-      target="_blank">[github]</a
+      target="_blank">github</a
     >
   </nav>
 </div>
