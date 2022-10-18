@@ -8,11 +8,6 @@ import sitemap from '@astrojs/sitemap';
 
 // https://astro.build/config
 export default defineConfig({
-  vite: {
-    server: {
-      open: true,
-    },
-  },
   site: 'https://krnsk0.dev',
   integrations: [mdx(), sitemap()],
 });
