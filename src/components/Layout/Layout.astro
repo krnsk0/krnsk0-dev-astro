@@ -9,21 +9,24 @@ export interface Props {
 const { title } = Astro.props;
 ---
 
-<Head title={title} />
+<html lang="en">
+  <Head title={title} />
+  <body>
+    <style>
+      .main {
+        display: flex;
+        justify-content: center;
+      }
+      .main-inner {
+        max-width: 680px;
+      }
+    </style>
+    <div class="main">
+      <div class="main-inner">
+        <Navbar />
 
-<style>
-  .main {
-    display: flex;
-    justify-content: center;
-  }
-  .main-inner {
-    max-width: 680px;
-  }
-</style>
-<div class="main">
-  <div class="main-inner">
-    <Navbar />
-
-    <slot />
-  </div>
-</div>
+        <slot />
+      </div>
+    </div>
+  </body>
+</html>

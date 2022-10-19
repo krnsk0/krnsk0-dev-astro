@@ -1,10 +1,10 @@
 /* https://www.happyhues.co/palettes/9 */
 /* https://www.happyhues.co/palettes/13 */
 :root {
-  --background: #e2e7f2;
-  --headline: #7700ff;
-  --paragraph: #282c35;
-  --links: #e53170;
+  --background: #efefef;
+  --headline: #161616;
+  --paragraph: #34363b;
+  --links: #3137e5;
   --inline-code-background: #b0b4bf;
   --inline-code-text: #282c35;
 }
