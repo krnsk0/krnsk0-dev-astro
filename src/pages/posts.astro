@@ -13,9 +13,7 @@ const posts = await getAllPosts();
           return (
             <li>
               <h2>
-                <a href={`posts/${slug}`} rel="prefetch">
-                  {title}
-                </a>
+                <a href={`posts/${slug}`}>{title}</a>
               </h2>
               <p>{formatDate(pubDate)}</p>
               <p>{description}</p>
