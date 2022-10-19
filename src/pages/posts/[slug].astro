@@ -6,20 +6,22 @@ import { formatDate } from '../../formatting/formatDate';
 export async function getStaticPaths() {
   const posts = await getAllPosts();
 
-  return posts.map(({ frontmatter: { slug, title, pubDate }, Content }) => {
-    return {
-      params: {
-        slug: slug,
-      },
-      props: { Content, title, pubDate },
-    };
-  });
+  return posts.map(
+    ({ frontmatter: { slug, title, pubDate, description }, Content }) => {
+      return {
+        params: {
+          slug: slug,
+        },
+        props: { Content, title, pubDate, description },
+      };
+    }
+  );
 }
 
-const { Content, title, pubDate } = Astro.props;
+const { Content, title, pubDate, description } = Astro.props;
 ---
 
-<Layout title={title}>
+<Layout title={title} description={description}>
   <h1>{title}</h1>
   <div>{formatDate(pubDate)}</div>
   <Content />

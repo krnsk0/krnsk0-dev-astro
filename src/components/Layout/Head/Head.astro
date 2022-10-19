@@ -1,13 +1,13 @@
 ---
 import './reset.css';
 import './globals.css';
-const { title } = Astro.props;
+import { SEO } from 'astro-seo';
+const { title, description } = Astro.props;
 ---
 
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width" />
   <link rel="icon" type="image/svg+xml" href="/favicon.ico" />
-  <meta name="generator" content={Astro.generator} />
-  <title>{title} | krnsk0.dev</title>
+  <SEO title={`${title} | krnsk0.dev`} description={description} />
 </head>
