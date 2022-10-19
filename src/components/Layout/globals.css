@@ -1,12 +1,12 @@
 /* https://www.happyhues.co/palettes/9 */
 /* https://www.happyhues.co/palettes/13 */
 :root {
-  --background: #282c35;
-  --headline: #ffac4d;
-  --paragraph: #c8c8c8;
+  --background: #e2e7f2;
+  --headline: #7700ff;
+  --paragraph: #282c35;
   --links: #e53170;
-  --inline-code-background: rgba(110, 120, 145, 0.3);
-  --inline-code-text: #c8c8c8;
+  --inline-code-background: rgba(181, 181, 181, 0.3);
+  --inline-code-text: #282c35;
 }
 
 /* Color */
