@@ -5,9 +5,8 @@ import { formatDate } from '../formatting/formatDate';
 const posts = await getAllPosts();
 ---
 
-<Layout title="Writing">
+<Layout title="Posts">
   <main>
-    <h1>writing</h1>
     <ul>
       {
         posts.map(({ frontmatter: { title, pubDate, description, slug } }) => {
