@@ -1,15 +1,17 @@
 import { defineConfig } from 'astro/config';
-
-// https://astro.build/config
 import mdx from '@astrojs/mdx';
-
-// https://astro.build/config
 import sitemap from '@astrojs/sitemap';
+import prefetch from '@astrojs/prefetch';
 
-// https://astro.build/config
 export default defineConfig({
   site: 'https://krnsk0.dev',
-  integrations: [mdx(), sitemap()],
+  integrations: [
+    mdx(),
+    sitemap(),
+    prefetch({
+      throttle: 3,
+    }),
+  ],
   markdown: {
     shikiConfig: {
       theme: 'github-dark',
