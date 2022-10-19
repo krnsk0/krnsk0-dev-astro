@@ -11,7 +11,7 @@ export type DateSchema = z.infer<typeof dateSchema>;
  */
 export const FrontmatterSchema = z.object({
   title: z.string(),
-  date: dateSchema,
+  pubDate: dateSchema,
   published: z.boolean(),
   description: z.string(),
   slug: z.string(),

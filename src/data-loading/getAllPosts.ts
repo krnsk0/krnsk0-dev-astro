@@ -39,6 +39,6 @@ export async function getAllPosts(): Promise<Posts> {
   });
 
   return unsortedPosts.sort(
-    (a, b) => b.frontmatter.date.getTime() - a.frontmatter.date.getTime()
+    (a, b) => b.frontmatter.pubDate.getTime() - a.frontmatter.pubDate.getTime()
   );
 }
