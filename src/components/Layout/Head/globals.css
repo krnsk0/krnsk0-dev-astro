@@ -3,13 +3,13 @@
 :root {
   --background: #efefef;
   --headline: #161616;
-  --paragraph: #34363b;
+  --paragraph: #212225;
   --links: #3137e5;
-  --inline-code-background: #b0b4bf;
-  --inline-code-text: #282c35;
+  --inline-code-background: #cfd2d8;
+  --inline-code-text: #000000;
 }
 
-/* Color */
+/* COLOR */
 body {
   background-color: var(--background);
 }
@@ -36,7 +36,12 @@ a {
   color: var(--links);
 }
 
-/* Sizing */
+code:not(pre *) {
+  background-color: var(--inline-code-background);
+  color: var(--inline-code-text);
+}
+
+/* SIZING/SPACING */
 h1 {
   font-size: 2em;
   margin: 2em 0 1em 0;
@@ -51,7 +56,44 @@ blockquote {
   margin: 0.8em 0 0.8em 0;
 }
 
-/* <code> elements not children of a <pre> */
 code:not(pre *) {
-  background-color: var(--inline-code-background);
+  padding: 0.1em 0.2em 0.1em 0.2em;
+  border-radius: 3px;
+  font-size: 0.9em;
+}
+
+pre.astro-code {
+  border-radius: 8px;
+  padding: 1em;
+}
+
+/* TYPEFACES */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: IBM Plex, Arial, Helvetica, sans-serif;
+  font-weight: 500;
+  line-height: 1.4em;
+}
+
+p,
+button,
+q,
+blockquote,
+a,
+table,
+span:not(pre *),
+div:not(pre *) {
+  font-family: 'IBM Plex', Arial, Helvetica, sans-serif;
+  font-weight: 400;
+  line-height: 1.4em;
+  font-size: 1.05em;
+}
+
+code {
+  font-family: 'IBM Plex Mono', 'Courier New', Courier, monospace;
+  font-weight: 400;
 }

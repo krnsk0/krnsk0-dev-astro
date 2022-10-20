@@ -23,6 +23,6 @@ const { Content, title, pubDate, description } = Astro.props;
 
 <Layout title={title} description={description}>
   <h1>{title}</h1>
-  <div>{formatDate(pubDate)}</div>
+  <p>{formatDate(pubDate)}</p>
   <Content />
 </Layout>
