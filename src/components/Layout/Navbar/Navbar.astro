@@ -40,5 +40,26 @@
       rel="noreferrer noopener"
       target="_blank">github</a
     >
+    <span>|</span>
+    <button id="color-toggle"></button>
+    <script is:inline>
+      const toggle = document.getElementById('color-toggle');
+      if (window.colorMode === 'dark') toggle.innerText = 'go light';
+      else if (window.colorMode === 'light') toggle.innerText = 'go dark';
+
+      toggle.addEventListener('click', function () {
+        if (window.colorMode === 'dark') {
+          setLight();
+          toggle.innerText = 'go dark';
+          window.colorMode = 'light';
+          window.localStorage.setItem('color-mode', 'light');
+        } else if (window.colorMode === 'light') {
+          setDark();
+          toggle.innerText = 'go light';
+          window.colorMode = 'dark';
+          window.localStorage.setItem('color-mode', 'dark');
+        }
+      });
+    </script>
   </nav>
 </div>

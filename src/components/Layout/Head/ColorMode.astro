@@ -55,7 +55,7 @@
     }
     return 'light';
   }
-  const colorMode = getInitialColorMode();
-  if (colorMode === 'dark') setDark();
-  if (colorMode === 'light') setLight();
+  window.colorMode = getInitialColorMode();
+  if (window.colorMode === 'dark') setDark();
+  if (window.colorMode === 'light') setLight();
 </script>
