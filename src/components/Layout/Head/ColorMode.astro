@@ -1,0 +1,61 @@
+---
+---
+
+<style id="dark" is:inline>
+  :root {
+    --background: #242424;
+    --headline: #e8e8e8;
+    --paragraph: #e6e5e5;
+    --links: #3137e5;
+    --inline-code-background: #6d6d6e;
+    --inline-code-text: #e2e2e2;
+  }
+</style>
+<style id="light" is:inline>
+  :root {
+    --background: #efefef;
+    --headline: #161616;
+    --paragraph: #212225;
+    --links: #3137e5;
+    --inline-code-background: #cfd2d8;
+    --inline-code-text: #000000;
+  }
+</style>
+
+<script is:inline>
+  const darkColors = document.getElementById('dark');
+  const lightColors = document.getElementById('light');
+
+  function setDark() {
+    lightColors.setAttribute('type', 'text');
+    darkColors.removeAttribute('type');
+  }
+  window.setDark = setDark;
+
+  function setLight() {
+    darkColors.setAttribute('type', 'text');
+    lightColors.removeAttribute('type');
+  }
+  window.setLight = setLight;
+
+  /**
+   * Inspired by
+   * https://www.joshwcomeau.com/react/dark-mode/
+   */
+  function getInitialColorMode() {
+    const persistedColorPreference = window.localStorage.getItem('color-mode');
+    const hasPersistedPreference = typeof persistedColorPreference === 'string';
+    if (hasPersistedPreference) {
+      return persistedColorPreference;
+    }
+    const mql = window.matchMedia('(prefers-color-scheme: dark)');
+    const hasMediaQueryPreference = typeof mql.matches === 'boolean';
+    if (hasMediaQueryPreference) {
+      return mql.matches ? 'dark' : 'light';
+    }
+    return 'light';
+  }
+  const colorMode = getInitialColorMode();
+  if (colorMode === 'dark') setDark();
+  if (colorMode === 'light') setLight();
+</script>

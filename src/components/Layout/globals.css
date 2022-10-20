@@ -1,14 +1,3 @@
-/* https://www.happyhues.co/palettes/9 */
-/* https://www.happyhues.co/palettes/13 */
-:root {
-  --background: #efefef;
-  --headline: #161616;
-  --paragraph: #212225;
-  --links: #3137e5;
-  --inline-code-background: #cfd2d8;
-  --inline-code-text: #000000;
-}
-
 /* COLOR */
 body {
   background-color: var(--background);

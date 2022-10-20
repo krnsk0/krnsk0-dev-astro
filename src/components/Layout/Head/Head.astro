@@ -1,13 +1,15 @@
 ---
-import './reset.css';
-import './globals.css';
+import '../reset.css';
+import '../globals.css';
 import { SEO } from 'astro-seo';
+import ColorMode from './ColorMode.astro';
 const { title, description } = Astro.props;
 ---
 
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width" />
+  <ColorMode />
   <link rel="icon" type="image/svg+xml" href="/favicon.ico" />
   <SEO title={`${title} | krnsk0.dev`} description={description} />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
