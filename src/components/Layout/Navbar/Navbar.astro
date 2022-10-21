@@ -54,6 +54,7 @@ import { Icon } from 'astro-icon';
         href="https://github.com/krnsk0"
         rel="noreferrer noopener"
         target="_blank"
+        aria-label="github"
       >
         <Icon class="icon" name="fa-brands:github" />
       </a>
@@ -61,16 +62,23 @@ import { Icon } from 'astro-icon';
         href="https://www.linkedin.com/in/krnsk0/"
         rel="noreferrer noopener"
         target="_blank"
+        aria-label="linkedin"
       >
         <Icon class="icon" name="fa-brands:linkedin" />
       </a>
-      <a href="/rss.xml" rel="noreferrer noopener" target="_blank">
+      <a
+        href="/rss.xml"
+        rel="noreferrer noopener"
+        target="_blank"
+        aria-label="rss"
+      >
         <Icon class="icon" name="fa-solid:rss" />
       </a>
       <a
         href="mailto:jkurinsky+website@fastmail.com"
         rel="noreferrer noopener"
         target="_blank"
+        aria-label="email"
       >
         <Icon class="icon" name="fa-solid:envelope" />
       </a>
@@ -86,8 +94,10 @@ import { Icon } from 'astro-icon';
       const lightIcon = document.getElementById('light-icon');
       if (window.colorMode === 'dark') {
         darkIcon.style.display = 'none';
+        toggle.setAttribute('aria-label', 'light mode');
       } else if (window.colorMode === 'light') {
         lightIcon.style.display = 'none';
+        toggle.setAttribute('aria-label', 'dark mode');
       }
 
       toggle.addEventListener('click', function () {
@@ -97,12 +107,14 @@ import { Icon } from 'astro-icon';
           darkIcon.style.display = 'inherit';
           window.colorMode = 'light';
           window.localStorage.setItem('color-mode', 'light');
+          toggle.setAttribute('aria-label', 'light mode');
         } else if (window.colorMode === 'light') {
           setDark();
           darkIcon.style.display = 'none';
           lightIcon.style.display = 'inherit';
           window.colorMode = 'dark';
           window.localStorage.setItem('color-mode', 'dark');
+          toggle.setAttribute('aria-label', 'dark mode');
         }
       });
     </script>
