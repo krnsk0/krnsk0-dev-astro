@@ -21,7 +21,8 @@ blockquote {
   color: var(--paragraph);
 }
 
-a {
+a,
+button {
   color: var(--links);
 }
 
