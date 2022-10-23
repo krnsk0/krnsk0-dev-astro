@@ -23,6 +23,11 @@ blockquote {
 
 a,
 button {
+  color: var(--paragraph);
+}
+
+a:hover,
+button:hover {
   color: var(--links);
 }
 
@@ -81,6 +86,18 @@ div:not(pre *) {
   font-weight: 400;
   line-height: 1.4em;
   font-size: 1.05em;
+}
+
+strong {
+  font-weight: bold;
+}
+
+em {
+  font-style: italic;
+}
+
+a {
+  text-decoration: underline;
 }
 
 code {
