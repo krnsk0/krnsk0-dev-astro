@@ -104,3 +104,8 @@ code {
   font-family: 'IBM Plex Mono', 'Courier New', Courier, monospace;
   font-weight: 400;
 }
+
+ol {
+  list-style: decimal;
+  margin-left: 2em;
+}
