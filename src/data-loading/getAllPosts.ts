@@ -18,7 +18,7 @@ export interface Post {
 export type Posts = Post[];
 
 export async function getAllPosts(): Promise<Posts> {
-  const rawImports = import.meta.glob('../posts/*.md?(x)', { eager: true });
+  const rawImports = import.meta.glob('../posts/*.mdx', { eager: true });
 
   const unsortedPosts = Object.values(rawImports).map((file: unknown) => {
     if (
