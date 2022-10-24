@@ -32,22 +32,29 @@ import { Icon } from 'astro-icon';
     margin-top: -0.4em;
     margin-left: 0.1em;
   }
-
   #color-toggle > svg {
     width: 1.4em;
     height: 1.4em;
     cursor: pointer;
   }
+
+  .title {
+    text-decoration: none;
+  }
+
+  .navbar-link {
+    text-decoration: none;
+  }
 </style>
 
 <div class="navbar">
   <nav>
-    <a href="/"><span class="logo">&gt; krnsk0.dev_</span></a>
+    <a href="/" class="title"><span class="logo">&gt; krnsk0.dev_</span></a>
 
     <div>
-      <a href="/posts">posts</a>
+      <a href="/posts" class="navbar-link">posts</a>
       <span>|</span>
-      <a href="/">about</a>
+      <a href="/" class="navbar-link">about</a>
     </div>
     <div class="icons">
       <a
