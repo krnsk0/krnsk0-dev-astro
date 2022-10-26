@@ -43,7 +43,7 @@ h1 {
 }
 h2 {
   font-size: 1.5em;
-  margin: 1.5em 0 1em 0;
+  margin: 1.5em 0 0.5em 0;
 }
 p,
 q,
@@ -69,7 +69,7 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: IBM Plex Sans, Arial, Helvetica, sans-serif;
+  font-family: Open Sans, Arial, Helvetica, sans-serif;
   font-weight: 500;
   line-height: 1.4em;
 }
