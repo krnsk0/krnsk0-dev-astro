@@ -69,7 +69,7 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: IBM Plex, Arial, Helvetica, sans-serif;
+  font-family: IBM Plex Sans, Arial, Helvetica, sans-serif;
   font-weight: 500;
   line-height: 1.4em;
 }
@@ -82,10 +82,11 @@ a,
 table,
 span:not(pre *),
 div:not(pre *) {
-  font-family: 'IBM Plex', Arial, Helvetica, sans-serif;
+  font-family: IBM Plex Sans, Arial, Helvetica, sans-serif;
   font-weight: 400;
   line-height: 1.4em;
   font-size: 1.05em;
+  letter-spacing: -0.25px;
 }
 
 strong {
@@ -101,8 +102,9 @@ a {
 }
 
 code {
-  font-family: 'IBM Plex Mono', 'Courier New', Courier, monospace;
+  font-family: IBM Plex Mono, 'Courier New', Courier, monospace;
   font-weight: 400;
+  letter-spacing: -0.25px;
 }
 
 ol {
