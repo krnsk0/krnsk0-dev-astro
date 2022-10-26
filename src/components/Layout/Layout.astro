@@ -17,15 +17,16 @@ const { title, description } = Astro.props;
       .main {
         display: flex;
         justify-content: center;
+        align-items: center;
       }
+
       .main-inner {
         max-width: 680px;
       }
     </style>
+    <Navbar class="navbar" />
     <div class="main">
       <div class="main-inner">
-        <Navbar />
-
         <slot />
       </div>
     </div>

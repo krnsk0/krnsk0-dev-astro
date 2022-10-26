@@ -3,6 +3,14 @@ import { Icon } from 'astro-icon';
 ---
 
 <style>
+  #navbar {
+    width: 100%;
+    background-color: var(--background-body);
+    border-bottom: 2px solid var(--paragraph);
+    padding: 0.4em 0 0.2em 0;
+    position: fixed;
+  }
+
   .logo {
     color: var(--headline);
     font-family: IBM Plex Sans, Arial, Helvetica, sans-serif;
@@ -18,6 +26,7 @@ import { Icon } from 'astro-icon';
     display: flex;
     flex-direction: row;
     align-items: center;
+    justify-content: center;
   }
 
   .icon {
@@ -29,6 +38,7 @@ import { Icon } from 'astro-icon';
   #color-toggle {
     display: flex;
     justify-content: center;
+    align-items: center;
     margin-top: -0.4em;
     margin-left: 0.1em;
   }
@@ -46,84 +56,81 @@ import { Icon } from 'astro-icon';
     text-decoration: none;
   }
 </style>
+<nav id="navbar">
+  <a href="/" class="title"><span class="logo">&gt; krnsk0.dev_</span></a>
 
-<div class="navbar">
-  <nav>
-    <a href="/" class="title"><span class="logo">&gt; krnsk0.dev_</span></a>
+  <div>
+    <a href="/posts" class="navbar-link">posts</a>
+    <span>|</span>
+    <a href="/" class="navbar-link">about</a>
+  </div>
+  <div class="icons">
+    <a
+      href="https://github.com/krnsk0"
+      rel="noreferrer noopener"
+      target="_blank"
+      aria-label="github"
+    >
+      <Icon class="icon" name="fa-brands:github" />
+    </a>
+    <a
+      href="https://www.linkedin.com/in/krnsk0/"
+      rel="noreferrer noopener"
+      target="_blank"
+      aria-label="linkedin"
+    >
+      <Icon class="icon" name="fa-brands:linkedin" />
+    </a>
+    <a
+      href="/rss.xml"
+      rel="noreferrer noopener"
+      target="_blank"
+      aria-label="rss"
+    >
+      <Icon class="icon" name="fa-solid:rss" />
+    </a>
+    <a
+      href="mailto:jkurinsky+website@fastmail.com"
+      rel="noreferrer noopener"
+      target="_blank"
+      aria-label="email"
+    >
+      <Icon class="icon" name="fa-solid:envelope" />
+    </a>
 
-    <div>
-      <a href="/posts" class="navbar-link">posts</a>
-      <span>|</span>
-      <a href="/" class="navbar-link">about</a>
-    </div>
-    <div class="icons">
-      <a
-        href="https://github.com/krnsk0"
-        rel="noreferrer noopener"
-        target="_blank"
-        aria-label="github"
-      >
-        <Icon class="icon" name="fa-brands:github" />
-      </a>
-      <a
-        href="https://www.linkedin.com/in/krnsk0/"
-        rel="noreferrer noopener"
-        target="_blank"
-        aria-label="linkedin"
-      >
-        <Icon class="icon" name="fa-brands:linkedin" />
-      </a>
-      <a
-        href="/rss.xml"
-        rel="noreferrer noopener"
-        target="_blank"
-        aria-label="rss"
-      >
-        <Icon class="icon" name="fa-solid:rss" />
-      </a>
-      <a
-        href="mailto:jkurinsky+website@fastmail.com"
-        rel="noreferrer noopener"
-        target="_blank"
-        aria-label="email"
-      >
-        <Icon class="icon" name="fa-solid:envelope" />
-      </a>
+    <button id="color-toggle">
+      <Icon class="icon" id="dark-icon" name="bi:moon-fill" />
+      <Icon class="icon" id="light-icon" name="bi:sun-fill" />
+    </button>
+  </div>
+  <script is:inline>
+    const toggle = document.getElementById('color-toggle');
+    const darkIcon = document.getElementById('dark-icon');
+    const lightIcon = document.getElementById('light-icon');
+    if (window.colorMode === 'dark') {
+      darkIcon.style.display = 'none';
+      toggle.setAttribute('aria-label', 'light mode');
+    } else if (window.colorMode === 'light') {
+      lightIcon.style.display = 'none';
+      toggle.setAttribute('aria-label', 'dark mode');
+    }
 
-      <button id="color-toggle">
-        <Icon class="icon" id="dark-icon" name="bi:moon-fill" />
-        <Icon class="icon" id="light-icon" name="bi:sun-fill" />
-      </button>
-    </div>
-    <script is:inline>
-      const toggle = document.getElementById('color-toggle');
-      const darkIcon = document.getElementById('dark-icon');
-      const lightIcon = document.getElementById('light-icon');
+    toggle.addEventListener('click', function () {
       if (window.colorMode === 'dark') {
-        darkIcon.style.display = 'none';
+        setLight();
+        lightIcon.style.display = 'none';
+        darkIcon.style.display = 'inherit';
+        window.colorMode = 'light';
+        window.localStorage.setItem('color-mode', 'light');
         toggle.setAttribute('aria-label', 'light mode');
       } else if (window.colorMode === 'light') {
-        lightIcon.style.display = 'none';
+        setDark();
+        darkIcon.style.display = 'none';
+        lightIcon.style.display = 'inherit';
+        window.colorMode = 'dark';
+        window.localStorage.setItem('color-mode', 'dark');
         toggle.setAttribute('aria-label', 'dark mode');
       }
-
-      toggle.addEventListener('click', function () {
-        if (window.colorMode === 'dark') {
-          setLight();
-          lightIcon.style.display = 'none';
-          darkIcon.style.display = 'inherit';
-          window.colorMode = 'light';
-          window.localStorage.setItem('color-mode', 'light');
-          toggle.setAttribute('aria-label', 'light mode');
-        } else if (window.colorMode === 'light') {
-          setDark();
-          darkIcon.style.display = 'none';
-          lightIcon.style.display = 'inherit';
-          window.colorMode = 'dark';
-          window.localStorage.setItem('color-mode', 'dark');
-          toggle.setAttribute('aria-label', 'dark mode');
-        }
-      });
-    </script>
-  </nav>
-</div>
+    });
+  </script>
+</nav>
