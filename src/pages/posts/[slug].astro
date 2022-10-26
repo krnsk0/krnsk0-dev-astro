@@ -21,8 +21,15 @@ export async function getStaticPaths() {
 const { Content, title, pubDate, description } = Astro.props;
 ---
 
+<style>
+  .date {
+    text-align: center;
+    margin: 0em 0em 3em 0em;
+  }
+</style>
+
 <Layout title={title} description={description}>
   <h1>{title}</h1>
-  <p>{formatDate(pubDate)}</p>
+  <p class="date">{formatDate(pubDate)}</p>
   <Content />
 </Layout>
