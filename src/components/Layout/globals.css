@@ -39,7 +39,7 @@ code:not(pre *) {
 /* SIZING/SPACING */
 h1 {
   font-size: 1.7em;
-  margin: 2em 0 0.5em 0;
+  margin: 0em 0 0.5em 0;
   text-align: center;
 }
 h2 {
@@ -111,4 +111,15 @@ code {
 ol {
   list-style: decimal;
   margin-left: 2em;
+}
+
+/* SHARED STYLES */
+
+.box {
+  border: 2px solid var(--paragraph);
+  border-radius: 3px;
+  box-shadow: var(--paragraph) 2px 2px;
+  padding: 1em;
+  margin: 0.5em 1em 0.5em 1em;
+  background-color: var(--background-body);
 }
