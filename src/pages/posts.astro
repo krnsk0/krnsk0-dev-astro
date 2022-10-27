@@ -6,23 +6,31 @@ const posts = await getAllPosts();
 ---
 
 <Layout title="Posts" description="All of krnsk0's blog posts">
-  <main>
-    <ul>
-      {
-        posts.map(({ frontmatter: { title, pubDate, description, slug } }) => {
-          return (
-            <li>
-              <h2>
-                <a href={`posts/${slug}`}>{title}</a>
-              </h2>
-              <p>{formatDate(pubDate)}</p>
-              <p>{description}</p>
-            </li>
-          );
-        })
-      }
-    </ul>
-  </main>
+  <style>
+    .post-title {
+      margin: 0;
+      font-size: 1.4em;
+    }
+    .date {
+      filter: brightness(350%);
+      font-size: 0.9em;
+    }
+  </style>
+  <ul>
+    {
+      posts.map(({ frontmatter: { title, pubDate, description, slug } }) => {
+        return (
+          <li class="box">
+            <h2 class="post-title">
+              <a href={`posts/${slug}`}>{title}</a>
+            </h2>
+            <p class="date">{formatDate(pubDate)}</p>
+            <p>{description}</p>
+          </li>
+        );
+      })
+    }
+  </ul>
 </Layout>
 
 <style>
