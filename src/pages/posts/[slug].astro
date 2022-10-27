@@ -25,11 +25,14 @@ const { Content, title, pubDate, description } = Astro.props;
   .date {
     text-align: center;
     margin: 0em 0em 3em 0em;
+    filter: brightness(350%);
   }
 </style>
 
 <Layout title={title} description={description}>
-  <h1>{title}</h1>
-  <p class="date">{formatDate(pubDate)}</p>
-  <Content />
+  <div class="box">
+    <h1>{title}</h1>
+    <p class="date">{formatDate(pubDate)}</p>
+    <Content />
+  </div>
 </Layout>
