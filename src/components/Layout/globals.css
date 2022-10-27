@@ -36,6 +36,10 @@ code:not(pre *) {
   color: var(--inline-code-text);
 }
 
+::selection {
+  background: var(--links);
+}
+
 /* SIZING/SPACING */
 h1 {
   font-size: 1.7em;
