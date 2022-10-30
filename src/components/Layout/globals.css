@@ -41,6 +41,10 @@ code:not(pre *) {
 }
 
 /* SIZING/SPACING */
+
+html {
+  font-size: 100%;
+}
 h1 {
   font-size: 1.7em;
   margin: 0em 0 0.5em 0;
