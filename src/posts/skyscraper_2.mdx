@@ -5,62 +5,62 @@ published: true
 description: 'Puzzle-solving with constraint propagation and backtracking search in Javascript. Covers clue elimination using sequence filtration, a form of constrained search.'
 slug: 'skyscraper-puzzle-2'
 ---
-
+import './skyscrapers.css'
 
 The [last post](/writing/skyscraper-puzzle-1) in this series described and implemented three forms of inference applicable to a [Skyscrapers](https://www.conceptispuzzles.com/index.aspx?uri=puzzle/skyscrapers) puzzle board. In combination, **edge clue initialization**, **resolved-cell constraint propagation**, and **process of elimination** allowed us to draw out all consequences from an initial look at a puzzle's edge clues:
 
-<table class="md_table large">
-  <tbody>
-    <tr>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td>1</td>
-      <td>2</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td></td>
-      <td class="border">123</td>
-      <td class="border">123</td>
-      <td class="border">4</td>
-      <td class="border">123</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td></td>
-      <td class="border">123</td>
-      <td class="border">4</td>
-      <td class="border">123</td>
-      <td class="border">123</td>
-      <td>2</td>
-    </tr>
-    <tr>
-      <td>1</td>
-      <td class="border">4</td>
-      <td class="border">123</td>
-      <td class="border">123</td>
-      <td class="border">123</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td></td>
-      <td class="border">123</td>
-      <td class="border">123</td>
-      <td class="border">12</td>
-      <td class="border">4</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td>3</td>
-      <td></td>
-      <td></td>
-    </tr>
-  </tbody>
-</table>
+<div class="skyscraper_grid large">
+    <div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div>1</div>
+      <div>2</div>
+      <div></div>
+    </div>
+    <div>
+      <div></div>
+      <div class="b">123</div>
+      <div class="b">123</div>
+      <div class="b">4</div>
+      <div class="b">123</div>
+      <div></div>
+    </div>
+    <div>
+      <div></div>
+      <div class="b">123</div>
+      <div class="b">4</div>
+      <div class="b">123</div>
+      <div class="b">123</div>
+      <div>2</div>
+    </div>
+    <div>
+      <div>1</div>
+      <div class="b">4</div>
+      <div class="b">123</div>
+      <div class="b">123</div>
+      <div class="b">123</div>
+      <div></div>
+    </div>
+    <div>
+      <div></div>
+      <div class="b">123</div>
+      <div class="b">123</div>
+      <div class="b">12</div>
+      <div class="b">4</div>
+      <div></div>
+    </div>
+    <div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div>3</div>
+      <div></div>
+      <div></div>
+    </div>
+  </div>
+
+
 
 In this post, we'll implement our final form of inference, **clue elimination**, using a technique we'll call **sequence filtration**, giving our program the capacity to solve every valid, published Skyscraper puzzle.
 
@@ -70,18 +70,16 @@ The last post concluded with the observation that an an experienced player might
 
 Though this is the only such observation to be made at this point on _this_ board, not all such observations, generally, need begin with a 2 clue across from a resolved cell with value `N`. Consider this row:
 
-<table class="md_table large">
-  <tbody>
-    <tr>
-      <td>3</td>
-      <td class="border">2</td>
-      <td class="border">13</td>
-      <td class="border">4</td>
-      <td class="border">13</td>
-      <td></td>
-    </tr>
-  </tbody>
-</table>
+  <div class="skyscraper_grid large">
+    <div>
+      <div>3</div>
+      <div class="b">2</div>
+      <div class="b">13</div>
+      <div class="b">4</div>
+      <div class="b">13</div>
+      <div></div>
+    </div>
+  </div>
 
 Here, the three clue combined with the constraints already in place are enough to allow us to resolve the entire row, as only the sequence `2-3-4-1` satisfies the clue.
 
@@ -107,29 +105,29 @@ That is, suppose we make a list of possible sequences not yet eliminated by our 
 
 We'll call this technique **sequence filtration**. How does it work? Taking the example from the 4x4 board we've been working with:
 
-<table class="md_table large">
-  <tbody>
-    <tr>
-      <td>2</td>
-    </tr>
-    <tr>
-      <td class="border">123</td>
-    </tr>
-    <tr>
-      <td class="border">123</td>
-    </tr>
-    <tr>
-      <td class="border">123</td>
-    </tr>
-    <tr>
-      <td class="border">4</td>
-    </tr>
-  </tbody>
-</table>
+
+
+<div class="skyscraper_grid large">
+    <div>
+      <div>2</div>
+    </div>
+    <div>
+      <div class="b">123</div>
+    </div>
+    <div>
+      <div class="b">123</div>
+    </div>
+    <div>
+      <div class="b">123</div>
+    </div>
+    <div>
+      <div class="b">4</div>
+    </div>
+</div>
 
 First we'll need to generate a list of valid sequences for these cells-- that is, sequences which don't contain repeated values and which are allowed by the clues:
 
-<div class="sequence-list">
+<div class="sequence_list">
   <span>1-3-2-4</span>
   <span>1-2-3-4</span>
   <span>2-3-1-4</span>
@@ -140,27 +138,25 @@ First we'll need to generate a list of valid sequences for these cells-- that is
 
 Now let's filter out those sequences which don't satisfy the two clue:
 
-<div class="sequence-list">
+<div class="sequence_list">
   <span>3-2-1-4</span>
   <span>3-1-2-4</span>
 </div>
 
 While we haven't resolved the entire row, we can effectively rule out all values except 3 for the first cell.
 
-Though somewhat trivial, sequence filtration also captures what happens in our second example:
+Though trivial, sequence filtration also captures what happens in our second example:
 
-<table class="md_table large">
-  <tbody>
-    <tr>
-      <td>3</td>
-      <td class="border">2</td>
-      <td class="border">13</td>
-      <td class="border">4</td>
-      <td class="border">13</td>
-      <td></td>
-    </tr>
-  </tbody>
-</table>
+<div class="skyscraper_grid large">
+    <div>
+      <div>3</div>
+      <div class="b">2</div>
+      <div class="b">13</div>
+      <div class="b">4</div>
+      <div class="b">13</div>
+      <div></div>
+    </div>
+</div>
 
 Here, just two sequences are possible: 2-1-4-3 and 2-3-4-1. Only the latter satisfies the constraints, and we can resolve not one but two cells in this row.
 
@@ -331,166 +327,162 @@ const iterateEdgeConstraints = (state) => {
 
 Calling this function inside our top-level function after running edge clue initialization is enough to solve our 4x4:
 
-<table class="md_table small">
-  <tbody>
-    <tr>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td>1</td>
-      <td>2</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td></td>
-      <td class="border">2</td>
-      <td class="border">1</td>
-      <td class="border">4</td>
-      <td class="border">3</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td></td>
-      <td class="border">3</td>
-      <td class="border">4</td>
-      <td class="border">1</td>
-      <td class="border">2</td>
-      <td>2</td>
-    </tr>
-    <tr>
-      <td>1</td>
-      <td class="border">4</td>
-      <td class="border">2</td>
-      <td class="border">3</td>
-      <td class="border">1</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td></td>
-      <td class="border">1</td>
-      <td class="border">3</td>
-      <td class="border">2</td>
-      <td class="border">4</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td>3</td>
-      <td></td>
-      <td></td>
-    </tr>
-  </tbody>
-</table>
+<div class="skyscraper_grid small">
+    <div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div>1</div>
+      <div>2</div>
+      <div></div>
+    </div>
+    <div>
+      <div></div>
+      <div class="b">2</div>
+      <div class="b">1</div>
+      <div class="b">4</div>
+      <div class="b">3</div>
+      <div></div>
+    </div>
+    <div>
+      <div></div>
+      <div class="b">3</div>
+      <div class="b">4</div>
+      <div class="b">1</div>
+      <div class="b">2</div>
+      <div>2</div>
+    </div>
+    <div>
+      <div>1</div>
+      <div class="b">4</div>
+      <div class="b">2</div>
+      <div class="b">3</div>
+      <div class="b">1</div>
+      <div></div>
+    </div>
+    <div>
+      <div></div>
+      <div class="b">1</div>
+      <div class="b">3</div>
+      <div class="b">2</div>
+      <div class="b">4</div>
+      <div></div>
+    </div>
+    <div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div>3</div>
+      <div></div>
+      <div></div>
+    </div>
+</div>
 
 ## Sequence Filtration: Optimization
 
 The program we've written is not particularly taxing for a puzzle as small as this. On my 2015 laptop it finishes in under 50ms. A larger puzzle can help us better understand the program's performance; here is a challenging 7x7:
 
-<table class="md_table small">
-  <tbody>
-    <tr>
-      <td> </td>
-      <td> </td>
-      <td>2</td>
-      <td>3</td>
-      <td> </td>
-      <td>2</td>
-      <td> </td>
-      <td> </td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td> </td>
-      <td class="border">7</td>
-      <td class="border">6</td>
-      <td class="border">2</td>
-      <td class="border">1</td>
-      <td class="border">5</td>
-      <td class="border">4</td>
-      <td class="border">3</td>
-      <td>5</td>
-    </tr>
-    <tr>
-      <td>4</td>
-      <td class="border">1</td>
-      <td class="border">3</td>
-      <td class="border">5</td>
-      <td class="border">4</td>
-      <td class="border">2</td>
-      <td class="border">7</td>
-      <td class="border">6</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td> </td>
-      <td class="border">6</td>
-      <td class="border">5</td>
-      <td class="border">4</td>
-      <td class="border">7</td>
-      <td class="border">3</td>
-      <td class="border">2</td>
-      <td class="border">1</td>
-      <td>4</td>
-    </tr>
-    <tr>
-      <td> </td>
-      <td class="border">5</td>
-      <td class="border">1</td>
-      <td class="border">7</td>
-      <td class="border">6</td>
-      <td class="border">4</td>
-      <td class="border">3</td>
-      <td class="border">2</td>
-      <td>5</td>
-    </tr>
-    <tr>
-      <td> </td>
-      <td class="border">4</td>
-      <td class="border">2</td>
-      <td class="border">1</td>
-      <td class="border">3</td>
-      <td class="border">7</td>
-      <td class="border">6</td>
-      <td class="border">5</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td> </td>
-      <td class="border">3</td>
-      <td class="border">7</td>
-      <td class="border">6</td>
-      <td class="border">2</td>
-      <td class="border">1</td>
-      <td class="border">5</td>
-      <td class="border">4</td>
-      <td>4</td>
-    </tr>
-    <tr>
-      <td> </td>
-      <td class="border">2</td>
-      <td class="border">4</td>
-      <td class="border">3</td>
-      <td class="border">5</td>
-      <td class="border">6</td>
-      <td class="border">1</td>
-      <td class="border">7</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td> </td>
-      <td>6</td>
-      <td> </td>
-      <td> </td>
-      <td> </td>
-      <td>2</td>
-      <td>4</td>
-      <td> </td>
-      <td> </td>
-    </tr>
-  </tbody>
-</table>
+<div class="skyscraper_grid small">
+    <div>
+      <div> </div>
+      <div> </div>
+      <div>2</div>
+      <div>3</div>
+      <div> </div>
+      <div>2</div>
+      <div> </div>
+      <div> </div>
+      <div> </div>
+    </div>
+    <div>
+      <div> </div>
+      <div class="b">7</div>
+      <div class="b">6</div>
+      <div class="b">2</div>
+      <div class="b">1</div>
+      <div class="b">5</div>
+      <div class="b">4</div>
+      <div class="b">3</div>
+      <div>5</div>
+    </div>
+    <div>
+      <div>4</div>
+      <div class="b">1</div>
+      <div class="b">3</div>
+      <div class="b">5</div>
+      <div class="b">4</div>
+      <div class="b">2</div>
+      <div class="b">7</div>
+      <div class="b">6</div>
+      <div> </div>
+    </div>
+    <div>
+      <div> </div>
+      <div class="b">6</div>
+      <div class="b">5</div>
+      <div class="b">4</div>
+      <div class="b">7</div>
+      <div class="b">3</div>
+      <div class="b">2</div>
+      <div class="b">1</div>
+      <div>4</div>
+    </div>
+    <div>
+      <div> </div>
+      <div class="b">5</div>
+      <div class="b">1</div>
+      <div class="b">7</div>
+      <div class="b">6</div>
+      <div class="b">4</div>
+      <div class="b">3</div>
+      <div class="b">2</div>
+      <div>5</div>
+    </div>
+    <div>
+      <div> </div>
+      <div class="b">4</div>
+      <div class="b">2</div>
+      <div class="b">1</div>
+      <div class="b">3</div>
+      <div class="b">7</div>
+      <div class="b">6</div>
+      <div class="b">5</div>
+      <div> </div>
+    </div>
+    <div>
+      <div> </div>
+      <div class="b">3</div>
+      <div class="b">7</div>
+      <div class="b">6</div>
+      <div class="b">2</div>
+      <div class="b">1</div>
+      <div class="b">5</div>
+      <div class="b">4</div>
+      <div>4</div>
+    </div>
+    <div>
+      <div> </div>
+      <div class="b">2</div>
+      <div class="b">4</div>
+      <div class="b">3</div>
+      <div class="b">5</div>
+      <div class="b">6</div>
+      <div class="b">1</div>
+      <div class="b">7</div>
+      <div> </div>
+    </div>
+    <div>
+      <div> </div>
+      <div>6</div>
+      <div> </div>
+      <div> </div>
+      <div> </div>
+      <div>2</div>
+      <div>4</div>
+      <div> </div>
+      <div> </div>
+    </div>
+</div>
 
 This one gets solved in under 100ms. Not bad-- but we need some better metrics. A flame graph shows (as predicted) that the program spends most of its time inside `generatePossibleSequences`.
 
@@ -595,214 +587,210 @@ Commenting out `performEdgeClueInitialization` inside our top-level function all
 
 Our program now has the capacity to solve all valid, published skyscraper puzzles for arbitrary N using an efficient technique based on constraint propagation and search. What our program cannot yet do is solve valid but unpublishable puzzles--that is, puzzles whose clues permit one and only one unique solution, but which cannot be solved without cross-row/cross-column guess-and-check. Here is one such puzzle discovered programmatically by CodeWars user [Medved01](https://www.codewars.com/users/medved01):
 
-<table class="md_table small">
-  <tbody>
-    <tr>
-      <td> </td>
-      <td>3</td>
-      <td>3</td>
-      <td>2</td>
-      <td>1</td>
-      <td>2</td>
-      <td>2</td>
-      <td>3</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td>3</td>
-      <td class="border"></td>
-      <td class="border"></td>
-      <td class="border"></td>
-      <td class="border"></td>
-      <td class="border"></td>
-      <td class="border"></td>
-      <td class="border"></td>
-      <td>4</td>
-    </tr>
-    <tr>
-      <td>2</td>
-      <td class="border"></td>
-      <td class="border"></td>
-      <td class="border"></td>
-      <td class="border"></td>
-      <td class="border"></td>
-      <td class="border"></td>
-      <td class="border"></td>
-      <td>3</td>
-    </tr>
-    <tr>
-      <td>5</td>
-      <td class="border"></td>
-      <td class="border"></td>
-      <td class="border"></td>
-      <td class="border"></td>
-      <td class="border"></td>
-      <td class="border"></td>
-      <td class="border"></td>
-      <td>2</td>
-    </tr>
-    <tr>
-      <td>2</td>
-      <td class="border"></td>
-      <td class="border"></td>
-      <td class="border"></td>
-      <td class="border"></td>
-      <td class="border"></td>
-      <td class="border"></td>
-      <td class="border"></td>
-      <td>4</td>
-    </tr>
-    <tr>
-      <td>4</td>
-      <td class="border"></td>
-      <td class="border"></td>
-      <td class="border"></td>
-      <td class="border"></td>
-      <td class="border"></td>
-      <td class="border"></td>
-      <td class="border"></td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <td>1</td>
-      <td class="border"></td>
-      <td class="border"></td>
-      <td class="border"></td>
-      <td class="border"></td>
-      <td class="border"></td>
-      <td class="border"></td>
-      <td class="border"></td>
-      <td>4</td>
-    </tr>
-    <tr>
-      <td>3</td>
-      <td class="border"></td>
-      <td class="border"></td>
-      <td class="border"></td>
-      <td class="border"></td>
-      <td class="border"></td>
-      <td class="border"></td>
-      <td class="border"></td>
-      <td>2</td>
-    </tr>
-    <tr>
-      <td></td>
-      <td>2</td>
-      <td>3</td>
-      <td>5</td>
-      <td>4</td>
-      <td>1</td>
-      <td>4</td>
-      <td>2</td>
-      <td> </td>
-    </tr>
-  </tbody>
-</table>
+<div class="skyscraper_grid small">
+    <div>
+      <div> </div>
+      <div>3</div>
+      <div>3</div>
+      <div>2</div>
+      <div>1</div>
+      <div>2</div>
+      <div>2</div>
+      <div>3</div>
+      <div> </div>
+    </div>
+    <div>
+      <div>3</div>
+      <div class="b"></div>
+      <div class="b"></div>
+      <div class="b"></div>
+      <div class="b"></div>
+      <div class="b"></div>
+      <div class="b"></div>
+      <div class="b"></div>
+      <div>4</div>
+    </div>
+    <div>
+      <div>2</div>
+      <div class="b"></div>
+      <div class="b"></div>
+      <div class="b"></div>
+      <div class="b"></div>
+      <div class="b"></div>
+      <div class="b"></div>
+      <div class="b"></div>
+      <div>3</div>
+    </div>
+    <div>
+      <div>5</div>
+      <div class="b"></div>
+      <div class="b"></div>
+      <div class="b"></div>
+      <div class="b"></div>
+      <div class="b"></div>
+      <div class="b"></div>
+      <div class="b"></div>
+      <div>2</div>
+    </div>
+    <div>
+      <div>2</div>
+      <div class="b"></div>
+      <div class="b"></div>
+      <div class="b"></div>
+      <div class="b"></div>
+      <div class="b"></div>
+      <div class="b"></div>
+      <div class="b"></div>
+      <div>4</div>
+    </div>
+    <div>
+      <div>4</div>
+      <div class="b"></div>
+      <div class="b"></div>
+      <div class="b"></div>
+      <div class="b"></div>
+      <div class="b"></div>
+      <div class="b"></div>
+      <div class="b"></div>
+      <div>1</div>
+    </div>
+    <div>
+      <div>1</div>
+      <div class="b"></div>
+      <div class="b"></div>
+      <div class="b"></div>
+      <div class="b"></div>
+      <div class="b"></div>
+      <div class="b"></div>
+      <div class="b"></div>
+      <div>4</div>
+    </div>
+    <div>
+      <div>3</div>
+      <div class="b"></div>
+      <div class="b"></div>
+      <div class="b"></div>
+      <div class="b"></div>
+      <div class="b"></div>
+      <div class="b"></div>
+      <div class="b"></div>
+      <div>2</div>
+    </div>
+    <div>
+      <div></div>
+      <div>2</div>
+      <div>3</div>
+      <div>5</div>
+      <div>4</div>
+      <div>1</div>
+      <div>4</div>
+      <div>2</div>
+      <div> </div>
+    </div>
+</div>
 
 The program we've written so far loops infinitely within `iterateEdgeConstraints`. Breaking the loop reveals the following board state:
 
-<table class="md_table large smalltext">
-  <tbody>
-    <tr>
-      <td> </td>
-      <td>3</td>
-      <td>3</td>
-      <td>2</td>
-      <td>1</td>
-      <td>2</td>
-      <td>2</td>
-      <td>3</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td>3</td>
-      <td class="border">12</td>
-      <td class="border">13</td>
-      <td class="border">12345</td>
-      <td class="border">7</td>
-      <td class="border">6</td>
-      <td class="border">45</td>
-      <td class="border">34</td>
-      <td>4</td>
-    </tr>
-    <tr>
-      <td>2</td>
-      <td class="border">6</td>
-      <td class="border">4</td>
-      <td class="border">7</td>
-      <td class="border">12345</td>
-      <td class="border">125</td>
-      <td class="border">12</td>
-      <td class="border">23</td>
-      <td>3</td>
-    </tr>
-    <tr>
-      <td>5</td>
-      <td class="border">12</td>
-      <td class="border">23</td>
-      <td class="border">34</td>
-      <td class="border">6</td>
-      <td class="border">1234</td>
-      <td class="border">7</td>
-      <td class="border">5</td>
-      <td>2</td>
-    </tr>
-    <tr>
-      <td>2</td>
-      <td class="border">5</td>
-      <td class="border">7</td>
-      <td class="border">6</td>
-      <td class="border">1234</td>
-      <td class="border">1234</td>
-      <td class="border">124</td>
-      <td class="border">123</td>
-      <td>4</td>
-    </tr>
-    <tr>
-      <td>4</td>
-      <td class="border">34</td>
-      <td class="border">123</td>
-      <td class="border">35</td>
-      <td class="border">12345</td>
-      <td class="border">12345</td>
-      <td class="border">6</td>
-      <td class="border">7</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <td>1</td>
-      <td class="border">7</td>
-      <td class="border">6</td>
-      <td class="border">234</td>
-      <td class="border">12345</td>
-      <td class="border">12345</td>
-      <td class="border">35</td>
-      <td class="border">1234</td>
-      <td>4</td>
-    </tr>
-    <tr>
-      <td>3</td>
-      <td class="border">34</td>
-      <td class="border">5</td>
-      <td class="border">12</td>
-      <td class="border">1234</td>
-      <td class="border">7</td>
-      <td class="border">123</td>
-      <td class="border">6</td>
-      <td>2</td>
-    </tr>
-    <tr>
-      <td></td>
-      <td>2</td>
-      <td>3</td>
-      <td>5</td>
-      <td>4</td>
-      <td>1</td>
-      <td>4</td>
-      <td>2</td>
-      <td> </td>
-    </tr>
-  </tbody>
-</table>
+<div class="skyscraper_grid huge">
+    <div>
+      <div> </div>
+      <div>3</div>
+      <div>3</div>
+      <div>2</div>
+      <div>1</div>
+      <div>2</div>
+      <div>2</div>
+      <div>3</div>
+      <div> </div>
+    </div>
+    <div>
+      <div>3</div>
+      <div class="b">12</div>
+      <div class="b">13</div>
+      <div class="b">12345</div>
+      <div class="b">7</div>
+      <div class="b">6</div>
+      <div class="b">45</div>
+      <div class="b">34</div>
+      <div>4</div>
+    </div>
+    <div>
+      <div>2</div>
+      <div class="b">6</div>
+      <div class="b">4</div>
+      <div class="b">7</div>
+      <div class="b">12345</div>
+      <div class="b">125</div>
+      <div class="b">12</div>
+      <div class="b">23</div>
+      <div>3</div>
+    </div>
+    <div>
+      <div>5</div>
+      <div class="b">12</div>
+      <div class="b">23</div>
+      <div class="b">34</div>
+      <div class="b">6</div>
+      <div class="b">1234</div>
+      <div class="b">7</div>
+      <div class="b">5</div>
+      <div>2</div>
+    </div>
+    <div>
+      <div>2</div>
+      <div class="b">5</div>
+      <div class="b">7</div>
+      <div class="b">6</div>
+      <div class="b">1234</div>
+      <div class="b">1234</div>
+      <div class="b">124</div>
+      <div class="b">123</div>
+      <div>4</div>
+    </div>
+    <div>
+      <div>4</div>
+      <div class="b">34</div>
+      <div class="b">123</div>
+      <div class="b">35</div>
+      <div class="b">12345</div>
+      <div class="b">12345</div>
+      <div class="b">6</div>
+      <div class="b">7</div>
+      <div>1</div>
+    </div>
+    <div>
+      <div>1</div>
+      <div class="b">7</div>
+      <div class="b">6</div>
+      <div class="b">234</div>
+      <div class="b">12345</div>
+      <div class="b">12345</div>
+      <div class="b">35</div>
+      <div class="b">1234</div>
+      <div>4</div>
+    </div>
+    <div>
+      <div>3</div>
+      <div class="b">34</div>
+      <div class="b">5</div>
+      <div class="b">12</div>
+      <div class="b">1234</div>
+      <div class="b">7</div>
+      <div class="b">123</div>
+      <div class="b">6</div>
+      <div>2</div>
+    </div>
+    <div>
+      <div></div>
+      <div>2</div>
+      <div>3</div>
+      <div>5</div>
+      <div>4</div>
+      <div>1</div>
+      <div>4</div>
+      <div>2</div>
+      <div> </div>
+    </div>
+</div>
 
-If you try solving this puzzle by hand beginning from this state, you'll discover that all information which can be gleaned from the clues when examining cells, rows, and columns in isolation has already been pushed to the board. To make further progress it will be necessary to make assumptions about nearly-solved cells which must then be tested through constraint propagation and process-of-elimination to see if they produce empty constraint lists elsewhere on the board. In the next installment, we'll add a recursive backtracking mechanism to the program to allow us to handle such cases.
+Solving this puzzle by hand beginning from this state reveals that all information which can be gleaned from the clues when examining cells, rows, and columns in isolation has already been pushed to the board. To make further progress it will be necessary to make assumptions about nearly-solved cells which must then be tested through constraint propagation and process-of-elimination to see if they produce empty constraint lists elsewhere on the board. In the next installment, we'll add a recursive backtracking mechanism to the program to allow us to handle such cases.

@@ -1,0 +1,43 @@
+/* rows */
+.skyscraper_grid > div {
+  display: flex;
+  justify-content: center;
+}
+
+.huge > div > div {
+  font-size: 0.7em;
+  width: 3.5em;
+  height: 3.5em;
+}
+
+.large > div > div {
+  width: 2.5em;
+  height: 2.5em;
+}
+
+.small > div > div {
+  width: 1.2em;
+  height: 1.2em;
+}
+
+/* cells */
+.skyscraper_grid > div > div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0.05em;
+  font-family: 'IBM Plex Mono', 'Courier New', Courier, monospace;
+}
+
+/* central cells with borders */
+.b {
+  border: 1px solid black;
+}
+
+/* no boxes */
+.sequence_list {
+  font-family: 'IBM Plex Mono', 'Courier New', Courier, monospace;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
