@@ -27,6 +27,9 @@ const { Content, title, pubDate, description } = Astro.props;
     margin: 0em 0em 3em 0em;
     filter: brightness(350%);
   }
+  :global(a) {
+    text-decoration: underline;
+  }
 </style>
 
 <Layout title={title} description={description}>

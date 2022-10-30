@@ -10,10 +10,16 @@ const posts = await getAllPosts();
     .post-title {
       margin: 0;
       font-size: 1.4em;
+      text-decoration: none !important;
     }
     .date {
       filter: brightness(350%);
       font-size: 0.9em;
+      margin: 0.2em 0 0.4em 0;
+    }
+    .description {
+      font-size: 0.9em;
+      margin: 0;
     }
   </style>
   <ul>
@@ -25,7 +31,7 @@ const posts = await getAllPosts();
               <a href={`posts/${slug}`}>{title}</a>
             </h2>
             <p class="date">{formatDate(pubDate)}</p>
-            <p>{description}</p>
+            <p class="description">{description}</p>
           </li>
         );
       })
