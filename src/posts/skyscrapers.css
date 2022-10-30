@@ -31,7 +31,7 @@
 
 /* central cells with borders */
 .b {
-  border: 1px solid black;
+  border: 1px solid var(--paragraph);
 }
 
 /* no boxes */
@@ -40,4 +40,12 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.strike {
+  text-decoration: line-through;
+}
+
+.dark {
+  background-color: var(--inline-code-background);
 }

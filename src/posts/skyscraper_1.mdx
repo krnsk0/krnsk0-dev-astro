@@ -38,88 +38,87 @@ The algorithm we build up won't be able to model everything a sophisticated orga
 
 In a board of size N, a clue with value N allows us to resolve an entire row or column:
 
-<table class="md_table small">
-  <tbody>
-    <tr>
-      <td class="">5</td>
-      <td class="border">1</td>
-      <td class="border">2</td>
-      <td class="border">3</td>
-      <td class="border">4</td>
-      <td class="border">5</td>
-    </tr>
-  </tbody>
-</table>
+<div class="skyscraper_grid small">
+
+ <div>
+   <div class="">5</div>
+   <div class="b">1</div>
+   <div class="b">2</div>
+   <div class="b">3</div>
+   <div class="b">4</div>
+   <div class="b">5</div>
+ </div>
+
+</div>
 
 A 1 clue allows us to resolve only the adjacent cell:
 
-<table class="md_table small">
-  <tbody>
-    <tr>
-      <td class="">1</td>
-      <td class="border">5</td>
-      <td class="border"> </td>
-      <td class="border"> </td>
-      <td class="border"> </td>
-      <td class="border"> </td>
-    </tr>
-  </tbody>
-</table>
+<div class="skyscraper_grid small">
+
+ <div>
+   <div class="">1</div>
+   <div class="b">5</div>
+   <div class="b"> </div>
+   <div class="b"> </div>
+   <div class="b"> </div>
+   <div class="b"> </div>
+ </div>
+
+</div>
 
 While clues between 1 and N don't let us resolve cells, they do allow us to rule out some values. For example, on a 5x5 board, a 5 clue allows us to rule out 5, 4, and 3 for the adjacent cell: a 5 would block all other buildings, making only one visible where we need four; a 4 would allow for only one taller where we need three; and a 3 would allow for only two taller where we need three. For the second cell, a 4 clue lets us rule out 5 and 4: a 5 in that cell would mean a maximum of two buildings are visible and a 4 would mean a maximum of three are visible. Finally, for the third cell in, a 4 clue lets us rule out a building with a height of 5.
 
-<table class="md_table small">
-  <tbody>
-    <tr>
-      <td>5</td>
-      <td class="border"></td>
-      <td class="border"></td>
-      <td class="border"></td>
-      <td class="border"></td>
-      <td class="border"></td>
-    </tr>
-    <tr>
-      <td></td>
-      <td class="red">5</td>
-      <td class="red">5</td>
-      <td class="red">5</td>
-      <td class="green">5</td>
-      <td class="green">5</td>
-    </tr>
-    <tr>
-      <td></td>
-      <td class="red">4</td>
-      <td class="red">4</td>
-      <td class="green">4</td>
-      <td class="green">4</td>
-      <td class="green">4</td>
-    </tr>
-    <tr>
-      <td></td>
-      <td class="red">3</td>
-      <td class="green">3</td>
-      <td class="green">3</td>
-      <td class="green">3</td>
-      <td class="green">3</td>
-    </tr>
-    <tr>
-      <td></td>
-      <td class="green">2</td>
-      <td class="green">2</td>
-      <td class="green">2</td>
-      <td class="green">2</td>
-      <td class="green">2</td>
-    </tr>
-    <tr>
-      <td></td>
-      <td class="green">1</td>
-      <td class="green">1</td>
-      <td class="green">1</td>
-      <td class="green">1</td>
-      <td class="green">1</td>
-    </tr>
-  </tbody>
-</table>
+<div class="skyscraper_grid small">
+
+ <div>
+   <div>5</div>
+   <div class="b"></div>
+   <div class="b"></div>
+   <div class="b"></div>
+   <div class="b"></div>
+   <div class="b"></div>
+ </div>
+ <div>
+   <div></div>
+   <div class="strike">5</div>
+   <div class="strike">5</div>
+   <div class="strike">5</div>
+   <div >5</div>
+   <div >5</div>
+ </div>
+ <div>
+   <div></div>
+   <div class="strike">4</div>
+   <div class="strike">4</div>
+   <div >4</div>
+   <div >4</div>
+   <div >4</div>
+ </div>
+ <div>
+   <div></div>
+   <div class="strike">3</div>
+   <div >3</div>
+   <div >3</div>
+   <div >3</div>
+   <div >3</div>
+ </div>
+ <div>
+   <div></div>
+   <div >2</div>
+   <div >2</div>
+   <div >2</div>
+   <div >2</div>
+   <div >2</div>
+ </div>
+ <div>
+   <div></div>
+   <div >1</div>
+   <div >1</div>
+   <div >1</div>
+   <div >1</div>
+   <div >1</div>
+ </div>
+</div>
 
 In general, this rule can be expressed as follows. On an `N * N` board, for clues `c` where `1 < c < N`, where `d` is the distance from the edge counting from zero, we can cross off all values from `N - c + 2 + d` up to `N`, inclusive.
 
@@ -145,58 +144,56 @@ const boardFactory = (N) => {
 
 Let's plan on our top-level function accepting clues in the form of an array which starts from the top left and goes clockwise around the board. If we're given an array with length 16--say, `[0, 0, 1, 2, 0, 2, 0, 0, 0, 3, 0, 0, 0, 1, 0, 0]`-- we'll know we have a 4x4 board that initially looks like this:
 
-<table class="md_table small">
-  <tbody>
-    <tr>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td>1</td>
-      <td>2</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td></td>
-      <td class="border"></td>
-      <td class="border"></td>
-      <td class="border"></td>
-      <td class="border"></td>
-      <td></td>
-    </tr>
-    <tr>
-      <td></td>
-      <td class="border"></td>
-      <td class="border"></td>
-      <td class="border"></td>
-      <td class="border"></td>
-      <td>2</td>
-    </tr>
-    <tr>
-      <td>1</td>
-      <td class="border"></td>
-      <td class="border"></td>
-      <td class="border"></td>
-      <td class="border"></td>
-      <td></td>
-    </tr>
-    <tr>
-      <td></td>
-      <td class="border"></td>
-      <td class="border"></td>
-      <td class="border"></td>
-      <td class="border"></td>
-      <td></td>
-    </tr>
-    <tr>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td>3</td>
-      <td></td>
-      <td></td>
-    </tr>
-  </tbody>
-</table>
+<div class="skyscraper_grid small">
+ <div>
+   <div></div>
+   <div></div>
+   <div></div>
+   <div>1</div>
+   <div>2</div>
+   <div></div>
+ </div>
+ <div>
+   <div></div>
+   <div class="b"></div>
+   <div class="b"></div>
+   <div class="b"></div>
+   <div class="b"></div>
+   <div></div>
+ </div>
+ <div>
+   <div></div>
+   <div class="b"></div>
+   <div class="b"></div>
+   <div class="b"></div>
+   <div class="b"></div>
+   <div>2</div>
+ </div>
+ <div>
+   <div>1</div>
+   <div class="b"></div>
+   <div class="b"></div>
+   <div class="b"></div>
+   <div class="b"></div>
+   <div></div>
+ </div>
+ <div>
+   <div></div>
+   <div class="b"></div>
+   <div class="b"></div>
+   <div class="b"></div>
+   <div class="b"></div>
+   <div></div>
+ </div>
+ <div>
+   <div></div>
+   <div></div>
+   <div></div>
+   <div>3</div>
+   <div></div>
+   <div></div>
+ </div>
+</div>
 
 Because we're choosing to store our board as a single-dimensional array, we'll need some helpers to allow us to access our data by row and column. Let's have these functions take in a row or column index, counting from zero in the top left, and return an array of indices pointing to the corresponding constraint lists. The caller will also need to pass in N, the size of the board.
 
@@ -330,95 +327,85 @@ What do we have so far? We can take an empty board and cross off values for some
 
 If we were to write code to pretty-print the state for our 4x4 example, we'd get something like this:
 
-<table class="md_table large">
-  <tbody>
-    <tr>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td>1</td>
-      <td>2</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td></td>
-      <td class="border">1234</td>
-      <td class="border">1234</td>
-      <td class="border">4</td>
-      <td class="border">123</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td></td>
-      <td class="border">1234</td>
-      <td class="border">1234</td>
-      <td class="border">1234</td>
-      <td class="border">123</td>
-      <td>2</td>
-    </tr>
-    <tr>
-      <td>1</td>
-      <td class="border">4</td>
-      <td class="border">1234</td>
-      <td class="border">123</td>
-      <td class="border">1234</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td></td>
-      <td class="border">1234</td>
-      <td class="border">1234</td>
-      <td class="border">12</td>
-      <td class="border">1234</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td>3</td>
-      <td></td>
-      <td></td>
-    </tr>
-  </tbody>
-</table>
+<div class="skyscraper_grid large">
+ <div>
+   <div></div>
+   <div></div>
+   <div></div>
+   <div>1</div>
+   <div>2</div>
+   <div></div>
+ </div>
+ <div>
+   <div></div>
+   <div class="b">1234</div>
+   <div class="b">1234</div>
+   <div class="b">4</div>
+   <div class="b">123</div>
+   <div></div>
+ </div>
+ <div>
+   <div></div>
+   <div class="b">1234</div>
+   <div class="b">1234</div>
+   <div class="b">1234</div>
+   <div class="b">123</div>
+   <div>2</div>
+ </div>
+ <div>
+   <div>1</div>
+   <div class="b">4</div>
+   <div class="b">1234</div>
+   <div class="b">123</div>
+   <div class="b">1234</div>
+   <div></div>
+ </div>
+ <div>
+   <div></div>
+   <div class="b">1234</div>
+   <div class="b">1234</div>
+   <div class="b">12</div>
+   <div class="b">1234</div>
+   <div></div>
+ </div>
+ <div>
+   <div></div>
+   <div></div>
+   <div></div>
+   <div>3</div>
+   <div></div>
+   <div></div>
+ </div>
+</div>
 
 The second form of inference--**constraint propagation**--starts from a resolved cell and rules out that value for all other cells in its row and column. Since we know that third cell in the first row is 4, we can eliminate of all of the remaining 4s in the "cross" formed by first row and third column.
 
-<table class="md_table large">
-  <tbody>
-    <tr>
-      <td class="border dark">
-        123<span class="red">4</span>
-      </td>
-      <td class="border dark">
-        123<span class="red">4</span>
-      </td>
-      <td class="border dark">4</td>
-      <td class="border dark">123</td>
-    </tr>
-    <tr>
-      <td class="border">1234</td>
-      <td class="border">1234</td>
-      <td class="border dark">
-        123<span class="red">4</span>
-      </td>
-      <td class="border">123</td>
-    </tr>
-    <tr>
-      <td class="border">4</td>
-      <td class="border">1234</td>
-      <td class="border dark">123</td>
-      <td class="border">1234</td>
-    </tr>
-    <tr>
-      <td class="border">1234</td>
-      <td class="border">1234</td>
-      <td class="border dark">12</td>
-      <td class="border">1234</td>
-    </tr>
-  </tbody>
-</table>
+<div class="skyscraper_grid large">
+ <div>
+   <div class="b dark">123<span class="strike">4</span></div>
+   <div class="b dark">123<span class="strike">4</span></div>
+   <div class="b dark">4</div>
+   <div class="b dark">123</div>
+ </div>
+ <div>
+   <div class="b">1234</div>
+   <div class="b">1234</div>
+   <div class="b dark">123<span class="strike">4</span></div>
+   <div class="b">123</div>
+ </div>
+ <div>
+   <div class="b">4</div>
+   <div class="b">1234</div>
+   <div class="b dark">123</div>
+   <div class="b">1234</div>
+ </div>
+ <div>
+   <div class="b">1234</div>
+   <div class="b">1234</div>
+   <div class="b dark">12</div>
+   <div class="b">1234</div>
+ </div>
+</div>
 
 To implement this programmatically, we'll first need a helper function that takes the index of a cell and returns the indices of all of all of the cells in its corresponding "cross."
 
@@ -524,58 +511,56 @@ After updating `performEdgeClueInitialization` and `propagateFromResolvedCell` t
 
 Where does this get us with our example? After propagating constraints from the two 4 cells resolved by the edge clues, the board looks like this:
 
-<table class="md_table large">
-  <tbody>
-    <tr>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td>1</td>
-      <td>2</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td></td>
-      <td class="border">123</td>
-      <td class="border">123</td>
-      <td class="border">4</td>
-      <td class="border">123</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td></td>
-      <td class="border">123</td>
-      <td class="border">1234</td>
-      <td class="border">123</td>
-      <td class="border">123</td>
-      <td>2</td>
-    </tr>
-    <tr>
-      <td>1</td>
-      <td class="border">4</td>
-      <td class="border">123</td>
-      <td class="border">123</td>
-      <td class="border">123</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td></td>
-      <td class="border">123</td>
-      <td class="border">1234</td>
-      <td class="border">12</td>
-      <td class="border">1234</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td>3</td>
-      <td></td>
-      <td></td>
-    </tr>
-  </tbody>
-</table>
+<div class="skyscraper_grid large">
+ <div>
+   <div></div>
+   <div></div>
+   <div></div>
+   <div>1</div>
+   <div>2</div>
+   <div></div>
+ </div>
+ <div>
+   <div></div>
+   <div class="b">123</div>
+   <div class="b">123</div>
+   <div class="b">4</div>
+   <div class="b">123</div>
+   <div></div>
+ </div>
+ <div>
+   <div></div>
+   <div class="b">123</div>
+   <div class="b">1234</div>
+   <div class="b">123</div>
+   <div class="b">123</div>
+   <div>2</div>
+ </div>
+ <div>
+   <div>1</div>
+   <div class="b">4</div>
+   <div class="b">123</div>
+   <div class="b">123</div>
+   <div class="b">123</div>
+   <div></div>
+ </div>
+ <div>
+   <div></div>
+   <div class="b">123</div>
+   <div class="b">1234</div>
+   <div class="b">12</div>
+   <div class="b">1234</div>
+   <div></div>
+ </div>
+ <div>
+   <div></div>
+   <div></div>
+   <div></div>
+   <div>3</div>
+   <div></div>
+   <div></div>
+ </div>
+</div>
 
 We can't get any farther without introducing a third form of inference.
 
@@ -585,36 +570,32 @@ We can't get any farther without introducing a third form of inference.
 
 For instance, in the example we've been working with, the absence of a 4 in all cells of row two except the second allows us to resolve that cell to 4:
 
-<table class="md_table large">
-  <tbody>
-    <tr>
-      <td class="border">123</td>
-      <td class="border">123</td>
-      <td class="border">4</td>
-      <td class="border">123</td>
-    </tr>
-    <tr>
-      <td class="border dark">123</td>
-      <td class="border dark">
-        123<span class="border">4</span>
-      </td>
-      <td class="border dark">123</td>
-      <td class="border dark">123</td>
-    </tr>
-    <tr>
-      <td class="border">4</td>
-      <td class="border">123</td>
-      <td class="border">123</td>
-      <td class="border">123</td>
-    </tr>
-    <tr>
-      <td class="border">123</td>
-      <td class="border">1234</td>
-      <td class="border">12</td>
-      <td class="border">1234</td>
-    </tr>
-  </tbody>
-</table>
+<div class="skyscraper_grid large">
+ <div>
+   <div class="b">123</div>
+   <div class="b">123</div>
+   <div class="b">4</div>
+   <div class="b">123</div>
+ </div>
+ <div>
+   <div class="b dark">123</div>
+   <div class="b dark">4</div>
+   <div class="b dark">123</div>
+   <div class="b dark">123</div>
+ </div>
+ <div>
+   <div class="b">4</div>
+   <div class="b">123</div>
+   <div class="b">123</div>
+   <div class="b">123</div>
+ </div>
+ <div>
+   <div class="b">123</div>
+   <div class="b">1234</div>
+   <div class="b">12</div>
+   <div class="b">1234</div>
+ </div>
+</div>
 
 How to implement PoE? We don't want to replicate the design we optimized away in kicking off constraint propagation, in which we iteratively scanned the entire board for some pattern or criteria. We'll want to call PoE function right after we mutate our data, which will make sure we run PoE all and only when necessary. Described from the top down, we'll need a function which:
 
@@ -739,58 +720,58 @@ if (action.type === `PROPAGATE_CONTSTRAINTS_FROM`) {
 
 Where does all of this code get us? After constraining the board with clues, propagating these constraints, and applying PoE, we're in a position to resolve a few cells in the 4x4 example we've been working with:
 
-<table class="md_table large">
-  <tbody>
-    <tr>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td>1</td>
-      <td>2</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td></td>
-      <td class="border">123</td>
-      <td class="border">123</td>
-      <td class="border">4</td>
-      <td class="border">123</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td></td>
-      <td class="border">123</td>
-      <td class="border">4</td>
-      <td class="border">123</td>
-      <td class="border">123</td>
-      <td>2</td>
-    </tr>
-    <tr>
-      <td>1</td>
-      <td class="border">4</td>
-      <td class="border">123</td>
-      <td class="border">123</td>
-      <td class="border">123</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td></td>
-      <td class="border">123</td>
-      <td class="border">123</td>
-      <td class="border">12</td>
-      <td class="border">4</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td>3</td>
-      <td></td>
-      <td></td>
-    </tr>
-  </tbody>
-</table>
+<div class="skyscraper_grid large">
+
+    <div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div>1</div>
+      <div>2</div>
+      <div></div>
+    </div>
+    <div>
+      <div></div>
+      <div class="b">123</div>
+      <div class="b">123</div>
+      <div class="b">4</div>
+      <div class="b">123</div>
+      <div></div>
+    </div>
+    <div>
+      <div></div>
+      <div class="b">123</div>
+      <div class="b">4</div>
+      <div class="b">123</div>
+      <div class="b">123</div>
+      <div>2</div>
+    </div>
+    <div>
+      <div>1</div>
+      <div class="b">4</div>
+      <div class="b">123</div>
+      <div class="b">123</div>
+      <div class="b">123</div>
+      <div></div>
+    </div>
+    <div>
+      <div></div>
+      <div class="b">123</div>
+      <div class="b">123</div>
+      <div class="b">12</div>
+      <div class="b">4</div>
+      <div></div>
+    </div>
+    <div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div>3</div>
+      <div></div>
+      <div></div>
+    </div>
+
+</div>
 
 Skilled puzzle-solvers often begin by resolving the position of the tallest tower in each row. That our approach also ends up doing this is an early indicator that we're accurately modeling how players approach the game.
 
