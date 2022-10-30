@@ -2,8 +2,18 @@
   "cleanUrls": true,
   "redirects": [
     {
+      "source": "/about",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/contact",
+      "destination": "/",
+      "permanent": true
+    },
+    {
       "source": "/writing",
-      "destination": "/posts",
+      "destination": "/",
       "permanent": true
     },
     {
