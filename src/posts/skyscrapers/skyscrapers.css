@@ -5,9 +5,14 @@
 }
 
 .huge > div > div {
-  font-size: 0.7em;
-  width: 3.5em;
-  height: 3.5em;
+  font-size: 0.5em;
+  width: 3.3em;
+  height: 3.3em;
+}
+@media (min-width: 768px) {
+  .huge > div > div {
+    font-size: 0.8em;
+  }
 }
 
 .large > div > div {
