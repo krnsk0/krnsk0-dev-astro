@@ -1,5 +1,8 @@
 ---
 import Layout from '../components/Layout/Layout.astro';
+import { getAllPosts } from '../data-loading/getAllPosts';
+import { formatDate } from '../formatting/formatDate';
+const posts = await getAllPosts();
 ---
 
 <style>
@@ -8,7 +11,8 @@ import Layout from '../components/Layout/Layout.astro';
   }
 
   .big {
-    font-size: 1.2em;
+    font-size: 1.5em;
+    padding: 1.4em;
   }
   .center {
     text-align: center;
@@ -17,6 +21,20 @@ import Layout from '../components/Layout/Layout.astro';
   blockquote {
     padding-top: 0.2em;
     padding-bottom: 0.4em;
+  }
+  .post-title {
+    margin: 0;
+    font-size: 1.4em;
+    text-decoration: none !important;
+  }
+  .date {
+    filter: brightness(350%);
+    font-size: 0.9em;
+    margin: 0.2em 0 0.4em 0;
+  }
+  .description {
+    font-size: 0.9em;
+    margin: 0;
   }
 </style>
 
@@ -37,4 +55,20 @@ import Layout from '../components/Layout/Layout.astro';
       >
     </blockquote>
   </div>
+
+  <ul>
+    {
+      posts.map(({ frontmatter: { title, pubDate, description, slug } }) => {
+        return (
+          <li class="box">
+            <h2 class="post-title">
+              <a href={`posts/${slug}`}>{title}</a>
+            </h2>
+            <p class="date">{formatDate(pubDate)}</p>
+            <p class="description">{description}</p>
+          </li>
+        );
+      })
+    }
+  </ul>
 </Layout>
