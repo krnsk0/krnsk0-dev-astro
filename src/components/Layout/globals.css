@@ -65,6 +65,7 @@ code:not(pre *) {
 pre.astro-code {
   border-radius: 8px;
   padding: 1em;
+  font-size: 0.9em;
 }
 
 /* TYPEFACES */
