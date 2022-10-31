@@ -5,7 +5,7 @@ export const get = () => {
     title: 'krnsk0.dev',
     description: "Jon Kurinsky's developer blog",
     site: import.meta.env.SITE,
-    items: import.meta.glob('../posts/*.mdx'),
+    items: import.meta.glob('../posts/**/*.mdx'),
     stylesheet: 'rss_styles.xsl',
   });
 };
