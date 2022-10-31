@@ -34,12 +34,12 @@
     {
       "source": "/posts",
       "destination": "/",
-      "permanenent": true
+      "permanent": true
     },
     {
       "source": "/posts/",
       "destination": "/",
-      "permanenent": true
+      "permanent": true
     },
     {
       "source": "/writing/skyscraper-puzzle-1",
