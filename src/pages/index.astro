@@ -41,6 +41,10 @@ const posts = getPostsWithYearSeparators(await getAllPosts());
     font-size: 0.9em;
     margin: 0;
   }
+
+  .box:hover > .post-title {
+    color: var(--links);
+  }
 </style>
 
 <Layout
@@ -72,13 +76,13 @@ const posts = getPostsWithYearSeparators(await getAllPosts());
             frontmatter: { title, pubDate, description, slug },
           } = postOrSeparator;
           return (
-            <li class="box">
-              <h3 class="post-title">
-                <a href={`posts/${slug}`}>{title}</a>
-              </h3>
-              <p class="date">{formatDate(pubDate)}</p>
-              <p class="description">{description}</p>
-            </li>
+            <a href={`posts/${slug}`}>
+              <li class="box hover">
+                <h3 class="post-title">{title}</h3>
+                <p class="date">{formatDate(pubDate)}</p>
+                <p class="description">{description}</p>
+              </li>
+            </a>
           );
         }
       })
