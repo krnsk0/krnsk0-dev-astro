@@ -1,8 +1,12 @@
 ---
 import Layout from '../components/Layout/Layout.astro';
 import { getAllPosts } from '../data-loading/getAllPosts';
+import {
+  getPostsWithYearSeparators,
+  isYearSeparator,
+} from '../data-loading/getPostsWithYearSeparators';
 import { formatDate } from '../formatting/formatDate';
-const posts = await getAllPosts();
+const posts = getPostsWithYearSeparators(await getAllPosts());
 ---
 
 <style>
@@ -59,16 +63,24 @@ const posts = await getAllPosts();
 
   <ul>
     {
-      posts.map(({ frontmatter: { title, pubDate, description, slug } }) => {
-        return (
-          <li class="box">
-            <h2 class="post-title">
-              <a href={`posts/${slug}`}>{title}</a>
-            </h2>
-            <p class="date">{formatDate(pubDate)}</p>
-            <p class="description">{description}</p>
-          </li>
-        );
+      posts.map((postOrSeparator) => {
+        if (isYearSeparator(postOrSeparator)) {
+          const { postYear } = postOrSeparator;
+          return <div>{postYear}</div>;
+        } else {
+          const {
+            frontmatter: { title, pubDate, description, slug },
+          } = postOrSeparator;
+          return (
+            <li class="box">
+              <h2 class="post-title">
+                <a href={`posts/${slug}`}>{title}</a>
+              </h2>
+              <p class="date">{formatDate(pubDate)}</p>
+              <p class="description">{description}</p>
+            </li>
+          );
+        }
       })
     }
   </ul>

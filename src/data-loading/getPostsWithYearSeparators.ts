@@ -3,6 +3,12 @@ import type { PostYearDescriptor } from './postTypes';
 
 export type PostsWithYearDescriptors = Array<PostYearDescriptor | Post>;
 
+export function isYearSeparator(
+  x: PostYearDescriptor | Post
+): x is PostYearDescriptor {
+  return !!(x as PostYearDescriptor).postYear;
+}
+
 export function getPostsWithYearSeparators(
   posts: Posts
 ): PostsWithYearDescriptors {
