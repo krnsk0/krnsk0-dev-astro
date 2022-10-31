@@ -16,14 +16,21 @@ const { title, description } = Astro.props;
   </script>
   <ColorMode />
   <link rel="icon" type="image/svg+xml" href="/favicon.ico" />
-  <SEO
-    title={`${title} | krnsk0.dev`}
-    description={description}
-    openGraph={{
-      basic: { title, type: 'article', image: '/android-chrome-512x512.png' },
-    }}
-  />
+  <SEO title={`${title} | krnsk0.dev`} description={description} />
   <GoogleFontsOptimizer
     url="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&family=IBM+Plex+Sans:wght@400;500&family=Open+Sans:wght@500&display=swap"
   />
+  <script
+    type="text/partytown"
+    async
+    src="https://www.googletagmanager.com/gtag/js?id=G-GC2PYF94LY"
+  ></script>
+  <script type="text/partytown">
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag('js', new Date());
+    gtag('config', 'G-GC2PYF94LY');
+  </script>
 </head>
