@@ -66,16 +66,16 @@ const posts = getPostsWithYearSeparators(await getAllPosts());
       posts.map((postOrSeparator) => {
         if (isYearSeparator(postOrSeparator)) {
           const { postYear } = postOrSeparator;
-          return <div>{postYear}</div>;
+          return <h2 class="year">{postYear}</h2>;
         } else {
           const {
             frontmatter: { title, pubDate, description, slug },
           } = postOrSeparator;
           return (
             <li class="box">
-              <h2 class="post-title">
+              <h3 class="post-title">
                 <a href={`posts/${slug}`}>{title}</a>
-              </h2>
+              </h3>
               <p class="date">{formatDate(pubDate)}</p>
               <p class="description">{description}</p>
             </li>
