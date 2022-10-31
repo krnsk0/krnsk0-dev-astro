@@ -7,7 +7,17 @@
       "permanent": true
     },
     {
+      "source": "/about/",
+      "destination": "/",
+      "permanent": true
+    },
+    {
       "source": "/contact",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/contact/",
       "destination": "/",
       "permanent": true
     },
@@ -15,6 +25,21 @@
       "source": "/writing",
       "destination": "/",
       "permanent": true
+    },
+    {
+      "source": "/writing/",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/posts",
+      "destination": "/",
+      "permanenent": true
+    },
+    {
+      "source": "/posts/",
+      "destination": "/",
+      "permanenent": true
     },
     {
       "source": "/writing/skyscraper-puzzle-1",
