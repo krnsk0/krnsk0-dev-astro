@@ -10,6 +10,9 @@ const posts = getPostsWithYearSeparators(await getAllPosts());
 ---
 
 <style>
+  .splash {
+    margin-bottom: 2em;
+  }
   .resume {
     text-decoration: underline;
   }
@@ -45,6 +48,10 @@ const posts = getPostsWithYearSeparators(await getAllPosts());
   .box:hover .post-title {
     color: var(--links);
   }
+
+  .year {
+    margin-left: 0.5em;
+  }
 </style>
 
 <Layout
@@ -52,16 +59,19 @@ const posts = getPostsWithYearSeparators(await getAllPosts());
   description="About page for Jon Kurinsky's developer blog"
 >
   <div class="box center big">
-    <p>
+    <p class="splash">
       I'm <strong>Jon Kurinsky</strong>, a Philadelphia-based software engineer.
     </p>
     <blockquote>
-      ⭐️ I'm currently on the job market! <a
-        class="resume"
-        href="Jon_Kurinsky.pdf"
-        target="_blank"
-        rel="noopener noreferrer">Here's my resume.</a
-      > ⭐️
+      <p>⭐️ I'm on the job market! ⭐️</p>
+      <p>
+        <a
+          class="resume"
+          href="Jon_Kurinsky.pdf"
+          target="_blank"
+          rel="noopener noreferrer">Here's my resume.</a
+        >
+      </p>
     </blockquote>
   </div>
 
