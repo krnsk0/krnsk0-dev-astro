@@ -17,3 +17,10 @@ export const FrontmatterSchema = z.object({
   slug: z.string(),
 });
 export type Frontmatter = z.infer<typeof FrontmatterSchema>;
+
+/**
+ * A separator between posts showing the post yearh
+ */
+export interface PostYearDescriptor {
+  postYear: string;
+}
