@@ -42,7 +42,7 @@ const posts = getPostsWithYearSeparators(await getAllPosts());
     margin: 0;
   }
 
-  .box:hover > .post-title {
+  .box:hover .post-title {
     color: var(--links);
   }
 </style>
@@ -70,19 +70,25 @@ const posts = getPostsWithYearSeparators(await getAllPosts());
       posts.map((postOrSeparator) => {
         if (isYearSeparator(postOrSeparator)) {
           const { postYear } = postOrSeparator;
-          return <h2 class="year">{postYear}</h2>;
+          return (
+            <li>
+              <h2 class="year">{postYear}</h2>
+            </li>
+          );
         } else {
           const {
             frontmatter: { title, pubDate, description, slug },
           } = postOrSeparator;
           return (
-            <a href={`posts/${slug}`}>
-              <li class="box hover">
-                <h3 class="post-title">{title}</h3>
-                <p class="date">{formatDate(pubDate)}</p>
-                <p class="description">{description}</p>
-              </li>
-            </a>
+            <li>
+              <a href={`posts/${slug}`}>
+                <div class="box hover">
+                  <h3 class="post-title">{title}</h3>
+                  <p class="date">{formatDate(pubDate)}</p>
+                  <p class="description">{description}</p>
+                </div>
+              </a>
+            </li>
           );
         }
       })
