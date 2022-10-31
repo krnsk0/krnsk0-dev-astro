@@ -12,13 +12,13 @@ export function isYearSeparator(
 export function getPostsWithYearSeparators(
   posts: Posts
 ): PostsWithYearDescriptors {
-  let lastSeenYear = -Infinity;
+  let lastSeenYear = Infinity;
 
   const output: PostsWithYearDescriptors = [];
 
   posts.forEach((post) => {
     const postYear = post.frontmatter.pubDate.getFullYear();
-    if (postYear > lastSeenYear) {
+    if (postYear < lastSeenYear) {
       lastSeenYear = postYear;
       output.push({ postYear: postYear.toString() });
     }
