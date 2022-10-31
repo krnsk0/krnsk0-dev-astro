@@ -23,6 +23,9 @@ const posts = getPostsWithYearSeparators(await getAllPosts());
   }
   .center {
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
   blockquote {
@@ -52,6 +55,10 @@ const posts = getPostsWithYearSeparators(await getAllPosts());
   .year {
     margin-left: 0.5em;
   }
+
+  blockquote {
+    max-width: 480px;
+  }
 </style>
 
 <Layout
@@ -63,14 +70,20 @@ const posts = getPostsWithYearSeparators(await getAllPosts());
       I'm <strong>Jon Kurinsky</strong>, a Philadelphia-based software engineer.
     </p>
     <blockquote>
-      <p>⭐️ I'm on the job market! ⭐️</p>
+      <p>⭐️ I'm on-market! ⭐️</p>
       <p>
-        <a
+        This site just contains my infrequently-updated technical blog. Check
+        out <a
+          class="resume"
+          href="https://github.com/krnsk0"
+          target="_blank"
+          rel="noopener noreferrer">my Github readme</a
+        > for more on what I'm looking for in my next role. <a
           class="resume"
           href="Jon_Kurinsky.pdf"
           target="_blank"
-          rel="noopener noreferrer">Here's my resume.</a
-        >
+          rel="noopener noreferrer">Here's my resume</a
+        >.
       </p>
     </blockquote>
   </div>
