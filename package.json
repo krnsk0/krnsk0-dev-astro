@@ -12,13 +12,18 @@
   },
   "dependencies": {
     "@astrojs/mdx": "^0.11.4",
+    "@astrojs/react": "^1.2.2",
     "@astrojs/rss": "^1.0.2",
     "@astrojs/sitemap": "^1.0.0",
+    "@types/react": "^18.0.24",
+    "@types/react-dom": "^18.0.8",
     "astro": "^1.6.1",
     "astro-google-fonts-optimizer": "^0.2.2",
     "astro-html-minifier": "^0.2.0",
     "astro-icon": "^0.7.3",
     "astro-seo": "^0.6.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "zod": "^3.19.1"
   },
   "devDependencies": {
