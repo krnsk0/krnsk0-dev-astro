@@ -47,7 +47,17 @@
       "permanent": true
     },
     {
+      "source": "/writing/skyscraper-puzzle-1/",
+      "destination": "/posts/skyscraper-puzzle-1",
+      "permanent": true
+    },
+    {
       "source": "/writing/skyscraper-puzzle-2",
+      "destination": "/posts/skyscraper-puzzle-2",
+      "permanent": true
+    },
+    {
+      "source": "/writing/skyscraper-puzzle-2/",
       "destination": "/posts/skyscraper-puzzle-2",
       "permanent": true
     }
